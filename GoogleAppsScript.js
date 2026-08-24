@@ -150,6 +150,53 @@ function doPost(e) {
       ip
     ]);
 
+    // 3. OPTIONAL META CONVERSION API (CAPI) FORWARDING FROM GOOGLE SCRIPT
+    if (payload.capi_token && payload.pixel_id) {
+      try {
+        const cleanPhone = phone.replace(/[^0-9]/g, '');
+        const bdPhone = cleanPhone.startsWith('88') ? cleanPhone : ('88' + cleanPhone);
+        const hashedPhone = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, bdPhone)
+          .map(function(b) { return ('0' + (b & 0xFF).toString(16)).slice(-2); }).join('');
+
+        const numericTotal = parseFloat(String(total).replace(/[^0-9.]/g, '')) || 0;
+
+        const capiData = {
+          data: [{
+            event_name: 'Purchase',
+            event_time: Math.floor(Date.now() / 1000),
+            event_id: payload.event_id || ('gas_capi_' + Date.now()),
+            event_source_url: payload.event_source_url || '',
+            action_source: 'website',
+            user_data: {
+              client_ip_address: ip,
+              client_user_agent: payload.user_agent || '',
+              fbp: payload.fbp || '',
+              fbc: payload.fbc || '',
+              ph: [hashedPhone]
+            },
+            custom_data: {
+              currency: 'BDT',
+              value: numericTotal,
+              content_name: product
+            }
+          }]
+        };
+
+        if (payload.test_event_code) {
+          capiData.test_event_code = payload.test_event_code;
+        }
+
+        UrlFetchApp.fetch('https://graph.facebook.com/v19.0/' + payload.pixel_id + '/events?access_token=' + payload.capi_token, {
+          method: 'post',
+          contentType: 'application/json',
+          payload: JSON.stringify(capiData),
+          muteHttpExceptions: true
+        });
+      } catch (capiErr) {
+        Logger.log('CAPI Forwarding Error: ' + capiErr.toString());
+      }
+    }
+
     return ContentService.createTextOutput(JSON.stringify({
       success: true,
       orderId: orderId,

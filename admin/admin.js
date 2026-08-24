@@ -665,6 +665,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const settingStoreName = document.getElementById('settingStoreName');
     const settingHelpline = document.getElementById('settingHelpline');
     const settingFbPixelId = document.getElementById('settingFbPixelId');
+    const settingFbCapiToken = document.getElementById('settingFbCapiToken');
     const settingFbTestCode = document.getElementById('settingFbTestCode');
     const settingAdminPassword = document.getElementById('settingAdminPassword');
 
@@ -673,6 +674,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (settingStoreName) settingStoreName.value = localStorage.getItem('store_name') || 'Jerin Fashion';
         if (settingHelpline) settingHelpline.value = localStorage.getItem('store_helpline') || '01886106856';
         if (settingFbPixelId) settingFbPixelId.value = localStorage.getItem('fb_pixel_id') || '1366048449016304';
+        if (settingFbCapiToken) settingFbCapiToken.value = localStorage.getItem('fb_capi_token') || '';
         if (settingFbTestCode) settingFbTestCode.value = localStorage.getItem('fb_test_code') || '';
     }
 
@@ -683,12 +685,13 @@ document.addEventListener('DOMContentLoaded', function() {
             if (settingStoreName) localStorage.setItem('store_name', settingStoreName.value.trim());
             if (settingHelpline) localStorage.setItem('store_helpline', settingHelpline.value.trim());
             if (settingFbPixelId) localStorage.setItem('fb_pixel_id', settingFbPixelId.value.trim());
+            if (settingFbCapiToken) localStorage.setItem('fb_capi_token', settingFbCapiToken.value.trim());
             if (settingFbTestCode) localStorage.setItem('fb_test_code', settingFbTestCode.value.trim());
             if (settingAdminPassword && settingAdminPassword.value.trim()) {
                 localStorage.setItem('admin_pwd', settingAdminPassword.value.trim());
             }
 
-            alert('সেটিংস এবং ফেসবুক পিক্সেল কনফিগারেশন সফলভাবে সংরক্ষিত হয়েছে!');
+            alert('সেটিংস, ফেসবুক পিক্সেল ও কনভারশন এপিআই (CAPI) সফলভাবে সংরক্ষিত হয়েছে!');
         });
     }
 

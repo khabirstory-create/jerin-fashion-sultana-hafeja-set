@@ -604,14 +604,43 @@ document.addEventListener('DOMContentLoaded', function() {
                 confirmButton.innerHTML = originalButtonText;
                 confirmButton.disabled = false;
 
-                // Facebook Pixel Purchase Tracking if available
+                const eventId = `purchase_${Date.now()}_${Math.floor(Math.random() * 100000)}`;
+
+                // 1. Facebook Pixel Purchase Tracking in Browser
                 if (window.fbTracker && typeof window.fbTracker.trackPurchase === 'function') {
                     window.fbTracker.trackPurchase({
                         total: grandTotal,
                         product: sizeQuantityDetails,
                         name: name,
                         phone: phone
-                    });
+                    }, eventId);
+                }
+
+                // 2. Meta Conversions API (CAPI) Server-side Event Dispatch
+                const capiToken = localStorage.getItem('fb_capi_token') || '';
+                const pixelId = localStorage.getItem('fb_pixel_id') || activeConfig.FB_PIXEL_ID || '1366048449016304';
+                const testCode = localStorage.getItem('fb_test_code') || activeConfig.FB_TEST_EVENT_CODE || '';
+
+                if (capiToken && pixelId) {
+                    fetch('/.netlify/functions/meta-capi', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            event_name: 'Purchase',
+                            event_id: eventId,
+                            pixel_id: pixelId,
+                            access_token: capiToken,
+                            test_event_code: testCode,
+                            value: grandTotal,
+                            currency: 'BDT',
+                            content_name: sizeQuantityDetails,
+                            phone: phone,
+                            name: name,
+                            event_source_url: window.location.href,
+                            fbp: (window.fbTracker && window.fbTracker.getCookie) ? window.fbTracker.getCookie('_fbp') : '',
+                            fbc: (window.fbTracker && window.fbTracker.getCookie) ? window.fbTracker.getCookie('_fbc') : ''
+                        })
+                    }).catch(err => console.warn('CAPI execution note:', err));
                 }
 
                 // Show thank you popup
