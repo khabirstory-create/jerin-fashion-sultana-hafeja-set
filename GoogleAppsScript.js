@@ -33,7 +33,7 @@ function setupSheetHeaders(sheet) {
   if (sheet.getLastRow() === 0) {
     sheet.appendRow(headers);
     const headerRange = sheet.getRange(1, 1, 1, headers.length);
-    headerRange.setBackground('#0d9488');
+    headerRange.setBackground('#0d5c46');
     headerRange.setFontColor('#ffffff');
     headerRange.setFontWeight('bold');
     sheet.setFrozenRows(1);
@@ -44,10 +44,32 @@ function getActiveOrdersSheet() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   let sheet = ss.getSheetByName('Orders');
   if (!sheet) {
-    sheet = ss.insertSheet('Orders');
+    const allSheets = ss.getSheets();
+    sheet = allSheets[0] || ss.getActiveSheet();
   }
   setupSheetHeaders(sheet);
   return sheet;
+}
+
+// ম্যানুয়ালি টেস্ট করার জন্য এই ফাংশনটি Apps Script থেকে Run করতে পারেন
+function testInsertOrder() {
+  const sheet = getActiveOrdersSheet();
+  const testId = 'JF-' + Math.floor(10000 + Math.random() * 90000);
+  const time = new Date().toLocaleString('en-US', { timeZone: 'Asia/Dhaka' });
+  sheet.appendRow([
+    testId,
+    time,
+    'ফারজানা আক্তার (টেস্ট)',
+    '01779000442',
+    'মিরপুর ১০, ঢাকা',
+    'ফুল সুলতানা সেট (54) - 1টি',
+    'ঢাকা ভিতরে (৮০৳)',
+    '৳২৪৩০',
+    'Website',
+    'Processing',
+    '103.100.10.1'
+  ]);
+  Logger.log('Test order inserted successfully: ' + testId);
 }
 
 // Handle GET requests (Admin Panel fetching orders)
