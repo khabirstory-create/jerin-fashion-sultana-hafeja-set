@@ -20,6 +20,37 @@
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Anek+Bangla:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Custom Stylesheet -->
     <link rel="stylesheet" href="../style.css">
+    <!-- Inline CSS Nuke for Netlify Badge & Drawer -->
+    <style>
+        netlify-drawer,
+        #netlify-drawer,
+        .netlify-drawer,
+        iframe#netlify-drawer,
+        iframe[src*="netlify"],
+        [data-netlify-drawer],
+        [data-netlify-preview-drawer],
+        div[class*="netlify"],
+        button[class*="netlify"],
+        a[class*="netlify"],
+        div[aria-label*="Netlify"],
+        [id*="netlify"],
+        [class*="netlify"],
+        .netlify-badge,
+        [class*="powered-by-netlify"] {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            transform: scale(0) !important;
+            width: 0 !important;
+            height: 0 !important;
+            position: fixed !important;
+            top: -99999px !important;
+            left: -99999px !important;
+            z-index: -99999 !important;
+        }
+    </style>
+
     <!-- Complete & Total Netlify Drawer / Badge Blocker -->
     <script>
         (function() {
@@ -51,13 +82,13 @@
             interceptAppend(document.head);
             interceptAppend(document.body);
 
-            // 3. Continuous element purging
+            // 3. Continuous element purging (Selector + Text Content Search)
             function purgeNetlify() {
                 var selectors = [
                     'netlify-drawer', '#netlify-drawer', '.netlify-drawer',
                     'iframe[src*="netlify"]', '[data-netlify-drawer]', '[data-netlify-preview-drawer]',
                     'div[class*="netlify"]', 'button[class*="netlify"]', 'a[class*="netlify"]',
-                    'div[aria-label*="Netlify"]', '[id*="netlify-drawer"]'
+                    'div[aria-label*="Netlify"]', '[id*="netlify-drawer"]', '.netlify-badge', '[class*="powered-by-netlify"]'
                 ];
                 var els = document.querySelectorAll(selectors.join(','));
                 for (var i = 0; i < els.length; i++) {
@@ -65,12 +96,23 @@
                         try { els[i].parentNode.removeChild(els[i]); } catch(e2) {}
                     }
                 }
+
+                // Text scan purge
+                var allEls = document.querySelectorAll('body > *:not(.container):not(.whatsapp-float):not(#thankYouPopup)');
+                for (var j = 0; j < allEls.length; j++) {
+                    var el = allEls[j];
+                    var txt = (el.textContent || '').trim();
+                    if (txt.indexOf('Netlify') >= 0 || txt.indexOf('Powered by') >= 0 || txt.indexOf('Pre-launch') >= 0) {
+                        el.style.display = 'none';
+                        try { el.remove(); } catch(err) {}
+                    }
+                }
             }
 
             if (window.MutationObserver) {
                 new MutationObserver(purgeNetlify).observe(document.documentElement, { childList: true, subtree: true });
             }
-            setInterval(purgeNetlify, 50);
+            setInterval(purgeNetlify, 30);
             window.addEventListener('DOMContentLoaded', purgeNetlify);
             window.addEventListener('load', purgeNetlify);
         })();
