@@ -960,11 +960,127 @@ document.addEventListener('DOMContentLoaded', function() {
         }).join('');
     };
 
-    // --- 16. INITIALIZE DASHBOARD ---
+    // --- 16. ORDER ACTIONS (STATUS UPDATE & DELETE) ---
+    window.updateOrderStatus = function(orderId, newStatus) {
+        let orders = getOrders();
+        const target = orders.find(o => o.orderId === orderId);
+        if (target) {
+            target.status = newStatus;
+            saveOrders(orders);
+            renderOrders();
+            updateDashboardStats();
+
+            // Push status update to Google Sheet
+            const sheetUrl = localStorage.getItem('gas_sheet_url') || (window.ADMIN_CONFIG && window.ADMIN_CONFIG.GOOGLE_SHEET_URL) || '';
+            if (sheetUrl) {
+                fetch(sheetUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({
+                        action: 'update_status',
+                        orderId: orderId,
+                        status: newStatus
+                    }),
+                    mode: 'no-cors'
+                }).catch(e => console.warn('Status sync to sheet error:', e));
+            }
+        }
+    };
+
+    window.deleteOrder = function(orderId) {
+        if (confirm(`আপনি কি নিশ্চিত যে অর্ডার #${orderId} মুছে ফেলতে চান?`)) {
+            let orders = getOrders();
+            orders = orders.filter(o => o.orderId !== orderId);
+            saveOrders(orders);
+            renderOrders();
+            updateDashboardStats();
+
+            // Delete from Google Sheet
+            const sheetUrl = localStorage.getItem('gas_sheet_url') || (window.ADMIN_CONFIG && window.ADMIN_CONFIG.GOOGLE_SHEET_URL) || '';
+            if (sheetUrl) {
+                fetch(sheetUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({
+                        action: 'delete_order',
+                        orderId: orderId
+                    }),
+                    mode: 'no-cors'
+                }).catch(e => console.warn('Delete sync to sheet error:', e));
+            }
+        }
+    };
+
+    // --- 17. GOOGLE SHEET BI-DIRECTIONAL LIVE SYNC ---
+    async function syncWithGoogleSheet(showFeedback = false) {
+        const sheetUrl = localStorage.getItem('gas_sheet_url') || (window.ADMIN_CONFIG && window.ADMIN_CONFIG.GOOGLE_SHEET_URL) || '';
+        const topSyncBtn = document.getElementById('topSyncBtn');
+
+        if (!sheetUrl) {
+            if (showFeedback) alert('গুগল শিটের Web App URL পাওয়া যায়নি! অনুগ্রহ করে Settings ট্যাবে লিঙ্কটি দিয়ে সেভ করুন।');
+            return;
+        }
+
+        if (topSyncBtn) {
+            topSyncBtn.disabled = true;
+            topSyncBtn.innerHTML = '<i class="ti ti-loader" style="animation: spin 1s infinite linear;"></i> <span>সিঙ্ক হচ্ছে...</span>';
+        }
+
+        try {
+            const res = await fetch(sheetUrl);
+            const data = await res.json();
+
+            if (data && data.success && Array.isArray(data.orders)) {
+                let localOrders = getOrders();
+                const localMap = new Map();
+                localOrders.forEach(o => localMap.set(o.orderId, o));
+
+                data.orders.forEach(sheetOrder => {
+                    if (localMap.has(sheetOrder.orderId)) {
+                        const existing = localMap.get(sheetOrder.orderId);
+                        if (sheetOrder.status) existing.status = sheetOrder.status;
+                    } else {
+                        localOrders.unshift({
+                            ...sheetOrder,
+                            numeric_total: parseFloat((sheetOrder.total || '').replace(/[^0-9.]/g, '')) || 0
+                        });
+                    }
+                });
+
+                saveOrders(localOrders);
+                renderOrders();
+                updateDashboardStats();
+
+                if (showFeedback) {
+                    alert(`গুগল শিট থেকে ${data.orders.length}টি অর্ডার সফলভাবে সিঙ্ক ও আপডেট হয়েছে! 🎉`);
+                }
+            }
+        } catch (err) {
+            console.warn('Google Sheet Sync note:', err);
+            if (showFeedback) {
+                alert('গুগল শিটের সাথে সংযোগ করা যাচ্ছে না। অনুগ্রহ করে নিশ্চিত করুন Apps Script এ Who has access: "Anyone" নির্বাচন করা আছে।');
+            }
+        } finally {
+            if (topSyncBtn) {
+                topSyncBtn.disabled = false;
+                topSyncBtn.innerHTML = '<i class="ti ti-refresh"></i> <span>গুগল শিট সিঙ্ক</span>';
+            }
+        }
+    }
+
+    const topSyncBtn = document.getElementById('topSyncBtn');
+    if (topSyncBtn) {
+        topSyncBtn.addEventListener('click', function() {
+            syncWithGoogleSheet(true);
+        });
+    }
+
+    // --- 18. INITIALIZE DASHBOARD ---
     function initDashboard() {
         loadSettings();
         renderOrders();
         updateDashboardStats();
+        syncWithGoogleSheet(false);
     }
 
     // Run auth check on page load

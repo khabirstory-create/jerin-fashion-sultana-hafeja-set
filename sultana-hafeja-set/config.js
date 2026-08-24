@@ -3,8 +3,8 @@
 // =================================================================
 
 const APP_CONFIG = {
-    // গুগল শিট Apps Script Web App URL (এখানে আপনার Apps Script Web App লিংক দিন)
-    GOOGLE_SHEET_URL: localStorage.getItem('gas_sheet_url') || "",
+    // গুগল শিট Apps Script Web App URL
+    GOOGLE_SHEET_URL: localStorage.getItem('gas_sheet_url') || "https://script.google.com/macros/s/AKfycbxuT9-ANKfKqU2VpLaG79HATwEXXv6HbsNaLuIB3Cy6Tc3X2SZ268rtkFdkHzsQqgF0/exec",
 
     // ব্যাকএন্ড API URL (ঐচ্ছিক)
     API_URL: "/api/orders",
