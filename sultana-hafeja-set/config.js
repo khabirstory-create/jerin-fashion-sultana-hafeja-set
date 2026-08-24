@@ -10,9 +10,9 @@ const APP_CONFIG = {
     API_URL: "/api/orders",
     MYSQL_API_URL: "/api/orders",
 
-    // ফেসবুক পিক্সেল আইডি ও টেস্ট কোড
-    FB_PIXEL_ID: "1366048449016304",
-    FB_TEST_EVENT_CODE: "",
+    // ফেসবুক পিক্সেল আইডি ও টেস্ট কোড (অ্যাডমিন সেটিংস থেকে অটো-সিঙ্ক)
+    FB_PIXEL_ID: localStorage.getItem('fb_pixel_id') || "1366048449016304",
+    FB_TEST_EVENT_CODE: localStorage.getItem('fb_test_code') || "",
 
     // ডেলিভারি চার্জ
     SHIPPING: {

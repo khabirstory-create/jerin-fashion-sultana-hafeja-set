@@ -664,12 +664,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const settingGoogleSheetUrl = document.getElementById('settingGoogleSheetUrl');
     const settingStoreName = document.getElementById('settingStoreName');
     const settingHelpline = document.getElementById('settingHelpline');
+    const settingFbPixelId = document.getElementById('settingFbPixelId');
+    const settingFbTestCode = document.getElementById('settingFbTestCode');
     const settingAdminPassword = document.getElementById('settingAdminPassword');
 
     function loadSettings() {
         if (settingGoogleSheetUrl) settingGoogleSheetUrl.value = localStorage.getItem('gas_sheet_url') || '';
         if (settingStoreName) settingStoreName.value = localStorage.getItem('store_name') || 'Jerin Fashion';
         if (settingHelpline) settingHelpline.value = localStorage.getItem('store_helpline') || '01886106856';
+        if (settingFbPixelId) settingFbPixelId.value = localStorage.getItem('fb_pixel_id') || '1366048449016304';
+        if (settingFbTestCode) settingFbTestCode.value = localStorage.getItem('fb_test_code') || '';
     }
 
     if (settingsForm) {
@@ -678,11 +682,13 @@ document.addEventListener('DOMContentLoaded', function() {
             if (settingGoogleSheetUrl) localStorage.setItem('gas_sheet_url', settingGoogleSheetUrl.value.trim());
             if (settingStoreName) localStorage.setItem('store_name', settingStoreName.value.trim());
             if (settingHelpline) localStorage.setItem('store_helpline', settingHelpline.value.trim());
+            if (settingFbPixelId) localStorage.setItem('fb_pixel_id', settingFbPixelId.value.trim());
+            if (settingFbTestCode) localStorage.setItem('fb_test_code', settingFbTestCode.value.trim());
             if (settingAdminPassword && settingAdminPassword.value.trim()) {
                 localStorage.setItem('admin_pwd', settingAdminPassword.value.trim());
             }
 
-            alert('সেটিংস সফলভাবে সংরক্ষিত হয়েছে!');
+            alert('সেটিংস এবং ফেসবুক পিক্সেল কনফিগারেশন সফলভাবে সংরক্ষিত হয়েছে!');
         });
     }
 

@@ -24,12 +24,18 @@ document.addEventListener('DOMContentLoaded', function() {
         if (callBtn) {
             callBtn.href = `tel:${helpPhone}`;
             callBtn.innerHTML = `<i class="ti ti-phone-call"></i> ${helpPhone}`;
+            callBtn.addEventListener('click', function() {
+                if (window.fbq) fbq('track', 'Contact', { content_name: 'Helpline Call' });
+            });
         }
     }
 
     const waBtn = document.querySelector('.whatsapp-float');
     if (waBtn && whatsappPhone) {
         waBtn.href = `https://wa.me/${whatsappPhone.replace(/[^0-9]/g, '')}`;
+        waBtn.addEventListener('click', function() {
+            if (window.fbq) fbq('track', 'Contact', { content_name: 'WhatsApp Chat' });
+        });
     }
 
     // --- Update Delivery Radio Labels with dynamic price from config ---
