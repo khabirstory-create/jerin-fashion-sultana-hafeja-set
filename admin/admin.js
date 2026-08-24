@@ -646,7 +646,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 <div style="margin-top: 16px; text-align: center; font-size: 12px; color: #64748b; border-top: 1px solid #f1f5f9; padding-top: 10px;">
                     আমাদের সাথে কেনাকাটা করার জন্য ধন্যবাদ! ❤️<br>
-                    <span style="font-size: 11px; color: #94a3b8; margin-top: 4px; display: inline-block;">© Created by "MD.KHABIR" Agency</span>
+                    <span style="font-size: 11px; color: #94a3b8; margin-top: 4px; display: inline-block;">© Created by <a href="https://www.facebook.com/MDKHABIR2" target="_blank" rel="noopener noreferrer" style="color: #0d9488; text-decoration: none; font-weight: 700;">"MD.KHABIR" Agency</a></span>
                 </div>
             </div>
         `;
