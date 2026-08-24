@@ -20,6 +20,27 @@
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Anek+Bangla:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Custom Stylesheet -->
     <link rel="stylesheet" href="../style.css">
+    <!-- Kill Netlify Drawer / Feedback Bar Instantly -->
+    <script>
+        (function() {
+            function killDrawer() {
+                var els = document.querySelectorAll('iframe[src*="netlify"], iframe#netlify-drawer, netlify-drawer, [data-netlify-drawer], [data-netlify-preview-drawer], [id*="netlify-drawer"], [class*="netlify-drawer"]');
+                for (var i = 0; i < els.length; i++) {
+                    try { els[i].parentNode.removeChild(els[i]); } catch(e) {}
+                }
+                if (document.body) {
+                    document.body.style.marginBottom = '0px';
+                    document.body.style.paddingBottom = '0px';
+                }
+            }
+            if (window.MutationObserver) {
+                new MutationObserver(killDrawer).observe(document.documentElement, { childList: true, subtree: true });
+            }
+            window.addEventListener('DOMContentLoaded', killDrawer);
+            window.addEventListener('load', killDrawer);
+            setInterval(killDrawer, 100);
+        })();
+    </script>
     <!-- Configuration & Meta Pixel Tracker -->
     <script src="config.js"></script>
     <script src="../fb-tracker.js"></script>
