@@ -82,29 +82,34 @@
             interceptAppend(document.head);
             interceptAppend(document.body);
 
-            // 3. Continuous element purging (Selector + Text Content Search)
+            // 3. Continuous element purging (Selector + Text Content Search + Shadow DOM)
             function purgeNetlify() {
                 var selectors = [
                     'netlify-drawer', '#netlify-drawer', '.netlify-drawer',
-                    'iframe[src*="netlify"]', '[data-netlify-drawer]', '[data-netlify-preview-drawer]',
+                    '#netlify-drawer-iframe', 'iframe[src*="netlify"]', '[data-netlify-drawer]', '[data-netlify-preview-drawer]',
                     'div[class*="netlify"]', 'button[class*="netlify"]', 'a[class*="netlify"]',
                     'div[aria-label*="Netlify"]', '[id*="netlify-drawer"]', '.netlify-badge', '[class*="powered-by-netlify"]'
                 ];
                 var els = document.querySelectorAll(selectors.join(','));
                 for (var i = 0; i < els.length; i++) {
                     try { els[i].remove(); } catch(e) {
-                        try { els[i].parentNode.removeChild(els[i]); } catch(e2) {}
+                        try { els[i].parentNode.removeChild(els[i]); } catch(e2) { els[i].style.display = 'none'; }
                     }
                 }
 
-                // Text scan purge
-                var allEls = document.querySelectorAll('body > *:not(.container):not(.whatsapp-float):not(#thankYouPopup)');
-                for (var j = 0; j < allEls.length; j++) {
-                    var el = allEls[j];
-                    var txt = (el.textContent || '').trim();
-                    if (txt.indexOf('Netlify') >= 0 || txt.indexOf('Powered by') >= 0 || txt.indexOf('Pre-launch') >= 0) {
-                        el.style.display = 'none';
-                        try { el.remove(); } catch(err) {}
+                // Global tree text & shadow DOM purge
+                var all = document.querySelectorAll('*:not(html):not(head):not(body):not(.container):not(.container *):not(.whatsapp-float):not(.whatsapp-float *):not(#thankYouPopup):not(#thankYouPopup *)');
+                for (var j = 0; j < all.length; j++) {
+                    var node = all[j];
+                    if (node.shadowRoot) {
+                        try { node.shadowRoot.innerHTML = ''; node.remove(); } catch(err) {}
+                    }
+                    var txt = (node.textContent || node.innerText || '').trim();
+                    if (txt.indexOf('Powered by Netlify') >= 0 || (txt.indexOf('Netlify') >= 0 && node.offsetHeight < 120)) {
+                        node.style.setProperty('display', 'none', 'important');
+                        try { node.remove(); } catch(err) {
+                            try { node.parentNode.removeChild(node); } catch(err2) {}
+                        }
                     }
                 }
             }

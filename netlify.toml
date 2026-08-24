@@ -1,3 +1,12 @@
+[build]
+  publish = "."
+
+[build.environment]
+  NETLIFY_DRAWER = "off"
+  NETLIFY_TOOLBAR = "off"
+  NETLIFY_PREVIEWS = "off"
+  DISABLE_NETLIFY_DRAWER = "true"
+
 [[redirects]]
   from = "/sultana-hafeja-set"
   to = "/sultana-hafeja-set/index.html"
@@ -16,10 +25,16 @@
     X-Content-Type-Options = "nosniff"
 
 [context.production.environment]
+  NETLIFY_DRAWER = "off"
   NETLIFY_TOOLBAR = "off"
+  NETLIFY_PREVIEWS = "off"
 
 [context.deploy-preview.environment]
+  NETLIFY_DRAWER = "off"
   NETLIFY_TOOLBAR = "off"
+  NETLIFY_PREVIEWS = "off"
 
 [context.branch-deploy.environment]
+  NETLIFY_DRAWER = "off"
   NETLIFY_TOOLBAR = "off"
+  NETLIFY_PREVIEWS = "off"

@@ -1,4 +1,38 @@
 /* =================================================================
+   🚫 ABSOLUTE NETLIFY DRAWER & BADGE PERMANENT KILLER
+   ================================================================= */
+netlify-drawer,
+#netlify-drawer,
+.netlify-drawer,
+#netlify-drawer-iframe,
+iframe[src*="netlify"],
+[data-netlify-drawer],
+[data-netlify-preview-drawer],
+div[class*="netlify"],
+button[class*="netlify"],
+a[class*="netlify"],
+[id*="netlify"],
+.netlify-badge,
+[class*="powered-by-netlify"],
+[aria-label*="Netlify"],
+[aria-label*="deploy preview"] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    position: fixed !important;
+    top: -99999px !important;
+    left: -99999px !important;
+    width: 0 !important;
+    height: 0 !important;
+    max-width: 0 !important;
+    max-height: 0 !important;
+    z-index: -99999 !important;
+    clip: rect(0, 0, 0, 0) !important;
+    transform: scale(0) !important;
+}
+
+/* =================================================================
    JERIN FASHION / SULTANA HAFEJA ADMIN DASHBOARD STYLES
    Exact Match to User UI Screenshot
    ================================================================= */
