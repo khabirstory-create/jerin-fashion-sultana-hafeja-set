@@ -680,4 +680,12 @@ document.addEventListener('DOMContentLoaded', function() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     }
+
+    // Auto remove Netlify Drawer / Feedback Bar if injected
+    const removeNetlifyDrawer = () => {
+        document.querySelectorAll('iframe#netlify-drawer, netlify-drawer, [data-netlify-drawer], [data-netlify-preview-drawer]').forEach(el => el.remove());
+    };
+    removeNetlifyDrawer();
+    setTimeout(removeNetlifyDrawer, 500);
+    setTimeout(removeNetlifyDrawer, 1500);
 });

@@ -1165,3 +1165,22 @@ input[type="reset"] {
     color: #0f766e;
     text-decoration: underline;
 }
+
+/* =========================================
+   7. DISABLE NETLIFY TOOLBAR / DRAWER
+   ========================================= */
+iframe#netlify-drawer,
+div[data-netlify-drawer],
+netlify-drawer,
+.netlify-drawer,
+#netlify-drawer,
+[data-netlify-preview-drawer] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    position: absolute !important;
+    left: -9999px !important;
+}

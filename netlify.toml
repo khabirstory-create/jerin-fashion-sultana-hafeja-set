@@ -14,3 +14,12 @@
     X-Frame-Options = "DENY"
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
+
+[context.production.environment]
+  NETLIFY_TOOLBAR = "off"
+
+[context.deploy-preview.environment]
+  NETLIFY_TOOLBAR = "off"
+
+[context.branch-deploy.environment]
+  NETLIFY_TOOLBAR = "off"
