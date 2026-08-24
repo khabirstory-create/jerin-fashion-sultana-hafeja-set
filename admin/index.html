@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="bn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Jerin Fashion</title>
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <!-- Tabler Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Anek+Bangla:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Admin Stylesheet -->
+    <link rel="stylesheet" href="admin.css">
+</head>
+
+<body>
+
+    <!-- =================================================================
+         1. ADMIN LOGIN / AUTH SCREEN
+         ================================================================= -->
+    <div id="authScreen" class="auth-wrapper">
+        <div class="auth-card">
+            <div class="auth-logo">
+                <i class="ti ti-layout-grid"></i>
+            </div>
+            <h2>Admin Panel</h2>
+            <p>লগইন করতে অ্যাডমিন পাসওয়ার্ড দিন</p>
+
+            <form id="loginForm">
+                <div class="auth-input-group">
+                    <input type="password" id="adminPasswordInput" placeholder="পাসওয়ার্ড লিখুন (Default: admin123)" required autocomplete="current-password">
+                    <button type="button" class="auth-toggle-pwd" id="togglePasswordBtn" title="পাসওয়ার্ড দেখুন">
+                        <i class="ti ti-eye"></i>
+                    </button>
+                </div>
+                <button type="submit" class="auth-submit-btn" id="loginBtn">লগইন করুন</button>
+                <div id="authErrorMsg" class="auth-error">ভুল পাসওয়ার্ড! আবার চেষ্টা করুন।</div>
+            </form>
+        </div>
+    </div>
+
+    <!-- =================================================================
+         2. MAIN ADMIN LAYOUT
+         ================================================================= -->
+    <div id="adminApp" class="admin-layout" style="display: none;">
+
+        <!-- Sidebar Backdrop for Mobile -->
+        <div id="sidebarBackdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:45;"></div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="brand-icon">
+                    <i class="ti ti-layout-grid"></i>
+                </div>
+                <div class="brand-info">
+                    <h1 id="sidebarBrandTitle">Admin Panel</h1>
+                    <span id="sidebarBrandSubtitle">Jerin Fashion</span>
+                </div>
+            </div>
+
+            <div class="sidebar-menu-label">Menu</div>
+            <nav class="sidebar-nav">
+                <a class="nav-item" href="#dashboard" data-tab="dashboard">
+                    <i class="ti ti-layout-dashboard"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a class="nav-item active" href="#orders" data-tab="orders">
+                    <i class="ti ti-list"></i>
+                    <span>Order List</span>
+                    <span class="badge" id="orderCountBadge">0</span>
+                </a>
+                <a class="nav-item" href="#products" data-tab="products">
+                    <i class="ti ti-shirt"></i>
+                    <span>Product Pages</span>
+                </a>
+                <a class="nav-item" href="#settings" data-tab="settings">
+                    <i class="ti ti-settings"></i>
+                    <span>Settings</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="../sultana-hafeja-set/" target="_blank" class="view-website-btn">
+                    <i class="ti ti-external-link"></i>
+                    <span>View Website</span>
+                </a>
+                <div class="user-profile-row">
+                    <div class="user-avatar-info">
+                        <div class="user-avatar">JF</div>
+                        <div class="user-text">
+                            <h4 id="profileAdminName">Jerin Fashion</h4>
+                            <span>Super Admin</span>
+                        </div>
+                    </div>
+                    <button class="logout-icon-btn" id="sidebarLogoutBtn" title="লগআউট">
+                        <i class="ti ti-logout"></i>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Wrapper -->
+        <main class="main-wrapper">
+
+            <!-- Top Header -->
+            <header class="top-header">
+                <div class="header-left">
+                    <button class="mobile-menu-btn" id="mobileMenuBtn" type="button">
+                        <i class="ti ti-menu-2"></i>
+                    </button>
+                    <div class="header-title">
+                        <i class="ti ti-list"></i>
+                        <span id="pageTitleDisplay">Order List</span>
+                    </div>
+                </div>
+
+                <div class="header-actions">
+                    <div class="clock-pill">
+                        <i class="ti ti-clock"></i>
+                        <span id="liveClockDisplay">08:42:44 AM</span>
+                    </div>
+                    <button class="btn-sync-top" id="topSyncBtn" title="গুগল শিট থেকে ডাটা সিঙ্ক করুন">
+                        <i class="ti ti-refresh"></i>
+                        <span>গুগল শিট সিঙ্ক</span>
+                    </button>
+                    <button class="btn-new-order" id="topNewOrderBtn">
+                        <i class="ti ti-plus"></i>
+                        <span>+ নতুন অর্ডার</span>
+                    </button>
+                    <button class="btn-logout-top" id="topLogoutBtn">
+                        <i class="ti ti-logout"></i>
+                        <span>লগআউট</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Content Container -->
+            <div class="content-area">
+
+                <!-- =========================================================
+                     TAB 1: ORDER LIST (MAIN VIEW)
+                     ========================================================= -->
+                <section id="ordersTabSection" class="tab-panel active">
+                    <div class="orders-card">
+
+                        <!-- Filter Section matching screenshot -->
+                        <div class="filter-section">
+                            <div class="search-bar-row">
+                                <div class="search-input-box">
+                                    <i class="ti ti-search"></i>
+                                    <input type="text" id="orderSearchInput" placeholder="নাম, ফোন বা Order ID দিয়ে খুঁজুন...">
+                                </div>
+                            </div>
+
+                            <div class="filters-bar-row">
+                                <div class="filters-left-group">
+                                    <div class="filter-item">
+                                        <span>স্ট্যাটাস:</span>
+                                        <select id="statusFilterSelect" class="filter-select">
+                                            <option value="">All Statuses</option>
+                                            <option value="Processing">Processing</option>
+                                            <option value="Completed">Completed</option>
+                                            <option value="Phone Confirm">Phone Confirm</option>
+                                            <option value="In Courier">In Courier</option>
+                                            <option value="Cancelled">Cancelled</option>
+                                            <option value="Returned">Returned</option>
+                                        </select>
+                                    </div>
+                                    <div class="filter-item">
+                                        <span>উৎস:</span>
+                                        <select id="sourceFilterSelect" class="filter-select">
+                                            <option value="">All Sources</option>
+                                            <option value="Direct">Direct</option>
+                                            <option value="Facebook">Facebook</option>
+                                            <option value="TikTok">TikTok</option>
+                                            <option value="Manual">Manual</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="filters-right-group">
+                                    <button class="btn-filter-sync" id="filterSyncBtn">
+                                        <i class="ti ti-refresh"></i>
+                                        <span>গুগল শিট সিঙ্ক</span>
+                                    </button>
+                                    <button class="btn-filter-export" id="exportCsvBtn">
+                                        <i class="ti ti-download"></i>
+                                        <span>CSV এক্সপোর্ট</span>
+                                    </button>
+                                    <button class="btn-filter-delete-all" id="deleteAllTestDataBtn">
+                                        <i class="ti ti-trash"></i>
+                                        <span>সব টেস্ট ডাটা মুছুন</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Orders Table -->
+                        <div class="table-responsive">
+                            <table class="orders-table" id="ordersTable">
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>তারিখ ও সময়</th>
+                                        <th>কাস্টমার তথ্য</th>
+                                        <th>ঠিকানা</th>
+                                        <th>অর্ডারকৃত পণ্য</th>
+                                        <th>ডেলিভারি এরিয়া</th>
+                                        <th>সর্বমোট বিল</th>
+                                        <th>উৎস</th>
+                                        <th>স্ট্যাটাস পরিবর্তন</th>
+                                        <th>অ্যাকশন</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ordersTableBody">
+                                    <!-- Dynamic rows loaded by admin.js -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div id="noOrdersMessage" class="empty-state" style="display: none;">
+                            <i class="ti ti-inbox"></i>
+                            <h3>কোনো অর্ডার পাওয়া যায়নি</h3>
+                            <p>নতুন অর্ডার আসলে এখানে তালিকাভুক্ত হবে।</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- =========================================================
+                     TAB 2: DASHBOARD
+                     ========================================================= -->
+                <section id="dashboardTabSection" class="tab-panel">
+                    <div class="dashboard-grid">
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <h3>মোট অর্ডার</h3>
+                                <div class="stat-value" id="statTotalOrders">0</div>
+                            </div>
+                            <div class="stat-icon-wrapper teal">
+                                <i class="ti ti-shopping-cart"></i>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <h3>মোট বিক্রয় (রেভিনিউ)</h3>
+                                <div class="stat-value" id="statTotalRevenue">৳0</div>
+                            </div>
+                            <div class="stat-icon-wrapper green">
+                                <i class="ti ti-cash"></i>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <h3>প্রসেসিং অর্ডার</h3>
+                                <div class="stat-value" id="statProcessingOrders">0</div>
+                            </div>
+                            <div class="stat-icon-wrapper blue">
+                                <i class="ti ti-clock"></i>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <h3>ডেলিভার্ড / সম্পন্ন</h3>
+                                <div class="stat-value" id="statCompletedOrders">0</div>
+                            </div>
+                            <div class="stat-icon-wrapper yellow">
+                                <i class="ti ti-circle-check"></i>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- =========================================================
+                     TAB 3: PRODUCT PAGES
+                     ========================================================= -->
+                <section id="productsTabSection" class="tab-panel">
+                    <div class="settings-container">
+                        <h2>প্রোডাক্ট ল্যান্ডিং পেজ</h2>
+                        <p>আপনার স্টোরের সক্রিয় প্রোডাক্ট ও লাইভ লিঙ্ক</p>
+                        
+                        <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: 12px; padding: 18px; display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+                            <div style="display: flex; align-items: center; gap: 14px;">
+                                <img src="../images/sultana-hafeja-set/6.webp" alt="সুলতানা হাফেজা সেট" style="width: 56px; height: 56px; border-radius: 8px; object-fit: cover;">
+                                <div>
+                                    <h3 style="font-size: 16px; font-weight: 700; color: #0f172a;">সুলতানা হাফেজা সেট</h3>
+                                    <span style="font-size: 13px; color: #64748b;">মূল্য: ৳২৩৫০ (ফুল সেট) | ৳১৩৫০ (হিজাব ও নিকাব)</span>
+                                </div>
+                            </div>
+                            <a href="../sultana-hafeja-set/" target="_blank" class="btn-sync-top" style="text-decoration: none;">
+                                <i class="ti ti-external-link"></i>
+                                <span>পেজ দেখুন</span>
+                            </a>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- =========================================================
+                     TAB 4: SETTINGS
+                     ========================================================= -->
+                <section id="settingsTabSection" class="tab-panel">
+                    <div class="settings-container">
+                        <h2>অ্যাডমিন ও গুগল শিট সেটিংস</h2>
+                        <p>গুগল শিট Web App URL ও স্টোর ইনফরমেশন কনফিগার করুন</p>
+
+                        <form id="settingsForm">
+                            <div class="settings-form-group">
+                                <label for="settingGoogleSheetUrl">গুগল শিট Apps Script Web App URL</label>
+                                <input type="url" id="settingGoogleSheetUrl" placeholder="https://script.google.com/macros/s/.../exec">
+                                <small>আপনার Google Sheet > Extensions > Apps Script থেকে Deploy as Web App করার পর পাওয়া URL টি এখানে দিন।</small>
+                            </div>
+
+                            <div class="settings-form-group">
+                                <label for="settingStoreName">স্টোরের নাম</label>
+                                <input type="text" id="settingStoreName" value="Jerin Fashion">
+                            </div>
+
+                            <div class="settings-form-group">
+                                <label for="settingHelpline">হেল্পলাইন মোবাইল নম্বর</label>
+                                <input type="text" id="settingHelpline" value="01886106856">
+                            </div>
+
+                            <div class="settings-form-group">
+                                <label for="settingAdminPassword">অ্যাডমিন পাসওয়ার্ড পরিবর্তন</label>
+                                <input type="text" id="settingAdminPassword" placeholder="নতুন পাসওয়ার্ড দিন (Default: admin123)">
+                            </div>
+
+                            <button type="submit" class="btn-save-settings">সেটিংস সেভ করুন</button>
+                        </form>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- =================================================================
+         MODALS
+         ================================================================= -->
+
+    <!-- Modal 1: + New Order Modal -->
+    <div id="newOrderModal" class="modal-backdrop">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>+ নতুন কাস্টমার অর্ডার তৈরি করুন</h3>
+                <button type="button" class="modal-close-btn" data-close="newOrderModal">
+                    <i class="ti ti-x"></i>
+                </button>
+            </div>
+            <form id="manualOrderForm">
+                <div class="settings-form-group">
+                    <label>কাস্টমারের নাম *</label>
+                    <input type="text" id="manualName" placeholder="কাস্টমারের নাম" required>
+                </div>
+                <div class="settings-form-group">
+                    <label>ফোন নম্বর *</label>
+                    <input type="tel" id="manualPhone" placeholder="018XXXXXXXX" required>
+                </div>
+                <div class="settings-form-group">
+                    <label>সম্পূর্ণ ঠিকানা *</label>
+                    <textarea id="manualAddress" placeholder="বাসা/রোড/এলাকা/জেলা" required></textarea>
+                </div>
+                <div class="settings-form-group">
+                    <label>অর্ডারকৃত পণ্য ও সাইজ *</label>
+                    <input type="text" id="manualProduct" placeholder="যেমন: ফুল সুলতানা সেট (56) - 1টি" required>
+                </div>
+                <div class="settings-form-group">
+                    <label>ডেলিভারি এরিয়া *</label>
+                    <select id="manualDelivery" class="filter-select" style="width: 100%;">
+                        <option value="ঢাকা বাহিরে (১৫০৳)">ঢাকা বাহিরে (১৫০৳)</option>
+                        <option value="ঢাকা ভিতরে (৮০৳)">ঢাকা ভিতরে (৮০৳)</option>
+                    </select>
+                </div>
+                <div class="settings-form-group">
+                    <label>সর্বমোট বিল (৳) *</label>
+                    <input type="number" id="manualTotal" placeholder="2350" required>
+                </div>
+                <div class="settings-form-group">
+                    <label>উৎস</label>
+                    <select id="manualSource" class="filter-select" style="width: 100%;">
+                        <option value="Manual">Manual</option>
+                        <option value="Direct">Direct</option>
+                        <option value="Facebook">Facebook</option>
+                        <option value="TikTok">TikTok</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-save-settings" style="width: 100%;">অর্ডার সেভ করুন</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal 2: Check Customer Courier History Modal -->
+    <div id="checkHistoryModal" class="modal-backdrop">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>কুরিয়ার ও ফোন হিস্ট্রি ভেরিফিকেশন</h3>
+                <button type="button" class="modal-close-btn" data-close="checkHistoryModal">
+                    <i class="ti ti-x"></i>
+                </button>
+            </div>
+            <div id="checkHistoryContent">
+                <!-- Dynamically filled -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 3: View Invoice Slip Modal -->
+    <div id="invoiceModal" class="modal-backdrop">
+        <div class="modal-box" style="width: 580px;">
+            <div class="modal-header">
+                <h3>অর্ডার মেমো / ইনভয়েস</h3>
+                <button type="button" class="modal-close-btn" data-close="invoiceModal">
+                    <i class="ti ti-x"></i>
+                </button>
+            </div>
+            <div id="invoicePrintArea">
+                <!-- Dynamically filled -->
+            </div>
+            <div style="margin-top: 18px; display: flex; gap: 10px; justify-content: flex-end;">
+                <button type="button" class="btn-filter-export" onclick="window.print()">
+                    <i class="ti ti-printer"></i> প্রিন্ট মেমো
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin JS Logic -->
+    <script src="admin.js"></script>
+</body>
+
+</html>
