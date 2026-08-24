@@ -494,6 +494,21 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Submit form handler
+    function generateOrderId() {
+        return 'JF-' + Math.floor(10000 + Math.random() * 90000);
+    }
+
+    function saveOrderLocally(orderData) {
+        try {
+            const raw = localStorage.getItem('borka_orders');
+            let orders = raw ? JSON.parse(raw) : [];
+            orders.unshift(orderData);
+            localStorage.setItem('borka_orders', JSON.stringify(orders));
+        } catch(e) {
+            console.warn('Local save error:', e);
+        }
+    }
+
     if (orderForm) {
         orderForm.addEventListener('submit', function(e) {
             e.preventDefault();

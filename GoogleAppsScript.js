@@ -29,7 +29,7 @@ function setupSheetHeaders(sheet) {
     'স্ট্যাটাস',
     'কাস্টমার আইপি'
   ];
-  
+
   if (sheet.getLastRow() === 0) {
     sheet.appendRow(headers);
     const headerRange = sheet.getRange(1, 1, 1, headers.length);
@@ -178,7 +178,7 @@ function doPost(e) {
         const cleanPhone = phone.replace(/[^0-9]/g, '');
         const bdPhone = cleanPhone.startsWith('88') ? cleanPhone : ('88' + cleanPhone);
         const hashedPhone = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, bdPhone)
-          .map(function(b) { return ('0' + (b & 0xFF).toString(16)).slice(-2); }).join('');
+          .map(function (b) { return ('0' + (b & 0xFF).toString(16)).slice(-2); }).join('');
 
         const numericTotal = parseFloat(String(total).replace(/[^0-9.]/g, '')) || 0;
 
