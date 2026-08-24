@@ -4,7 +4,7 @@
 
 const APP_CONFIG = {
     // গুগল শিট Apps Script Web App URL
-    GOOGLE_SHEET_URL: localStorage.getItem('gas_sheet_url') || "https://script.google.com/macros/s/AKfycbzSY-ND3G88EFTgu_igRvmavcaIuJ6hZrhKXO98BV0mL1k10yxISDrwFuQM0gtTzUjG/exec",
+    GOOGLE_SHEET_URL: localStorage.getItem('gas_sheet_url') || "https://script.google.com/macros/s/AKfycbxjLSojt-GxM3dpBwJ7gkbYgloVvGLO-VhaMGaAiJRpKaSiW28kerZNi9jcTDTLPedm/exec",
 
     // ব্যাকএন্ড API URL (ঐচ্ছিক)
     API_URL: "/api/orders",
