@@ -10,8 +10,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const shippingOutside = (activeConfig.SHIPPING && activeConfig.SHIPPING.OUTSIDE_DHAKA) || 150;
     const apiEndpoint = activeConfig.API_URL || activeConfig.MYSQL_API_URL || '/api/orders';
     const sheetEndpoint = activeConfig.GOOGLE_SHEET_URL || localStorage.getItem('gas_sheet_url') || '';
-    const helpPhone = activeConfig.HELP_PHONE || '01886106856';
-    const whatsappPhone = activeConfig.WHATSAPP_PHONE || '8801886106856';
+    const helpPhone = activeConfig.HELP_PHONE || '01779000442';
+    const whatsappPhone = activeConfig.WHATSAPP_PHONE || '8801779000442';
 
     let selectedProducts = [];
     let deliveryCharge = shippingOutside; // Default outside Dhaka

@@ -607,7 +607,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <div>
                             <h2 style="font-size: 20px; font-weight: 800; color: #0d9488;">Jerin Fashion</h2>
                             <p style="font-size: 12px; color: #64748b;">সুলতানা হাফেজা সেট - প্রিমিয়াম কালেকশন</p>
-                            <p style="font-size: 12px; color: #64748b;">হেল্পলাইন: 01886106856</p>
+                            <p style="font-size: 12px; color: #64748b;">হেল্পলাইন: 01779000442</p>
                         </div>
                     </div>
                     <div style="text-align: right;">
@@ -676,7 +676,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function loadSettings() {
         if (settingGoogleSheetUrl) settingGoogleSheetUrl.value = localStorage.getItem('gas_sheet_url') || '';
         if (settingStoreName) settingStoreName.value = localStorage.getItem('store_name') || 'Jerin Fashion';
-        if (settingHelpline) settingHelpline.value = localStorage.getItem('store_helpline') || '01886106856';
+        if (settingHelpline) settingHelpline.value = localStorage.getItem('store_helpline') || '01779000442';
         if (settingFbPixelId) settingFbPixelId.value = localStorage.getItem('fb_pixel_id') || '1366048449016304';
         if (settingFbCapiToken) settingFbCapiToken.value = localStorage.getItem('fb_capi_token') || '';
         if (settingFbTestCode) settingFbTestCode.value = localStorage.getItem('fb_test_code') || '';

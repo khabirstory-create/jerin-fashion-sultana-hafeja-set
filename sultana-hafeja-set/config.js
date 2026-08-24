@@ -21,8 +21,8 @@ const APP_CONFIG = {
     },
 
     // হেল্পলাইন ও হোয়াটসঅ্যাপ নম্বর
-    HELP_PHONE: "01886106856",
-    WHATSAPP_PHONE: "8801886106856",
+    HELP_PHONE: "01779000442",
+    WHATSAPP_PHONE: "8801779000442",
 
     // অফার কাউন্টডাউন মিনিট
     COUNTDOWN_MINUTES: 30,

@@ -4,7 +4,7 @@
 
 const ADMIN_CONFIG = {
     DEFAULT_STORE_NAME: "Jerin Fashion",
-    DEFAULT_HELPLINE: "01886106856",
+    DEFAULT_HELPLINE: "01779000442",
     DEFAULT_ADMIN_PWD: "admin123",
     GOOGLE_SHEET_URL: localStorage.getItem('gas_sheet_url') || ""
 };
