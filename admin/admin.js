@@ -602,10 +602,13 @@ document.addEventListener('DOMContentLoaded', function() {
         invoicePrintArea.innerHTML = `
             <div style="border: 2px solid #0f172a; border-radius: 12px; padding: 24px; background: #ffffff;">
                 <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px dashed #cbd5e1; padding-bottom: 16px; margin-bottom: 16px;">
-                    <div>
-                        <h2 style="font-size: 22px; font-weight: 800; color: #0d9488;">Jerin Fashion</h2>
-                        <p style="font-size: 12.5px; color: #64748b;">সুলতানা হাফেজা সেট - প্রিমিয়াম কালেকশন</p>
-                        <p style="font-size: 12.5px; color: #64748b;">হেল্পলাইন: 01886106856</p>
+                    <div style="display: flex; gap: 14px; align-items: center;">
+                        <img src="../images/logo.jpg" alt="Jerin Fashion" style="height: 54px; width: auto; border-radius: 8px; border: 1px solid #e2e8f0;">
+                        <div>
+                            <h2 style="font-size: 20px; font-weight: 800; color: #0d9488;">Jerin Fashion</h2>
+                            <p style="font-size: 12px; color: #64748b;">সুলতানা হাফেজা সেট - প্রিমিয়াম কালেকশন</p>
+                            <p style="font-size: 12px; color: #64748b;">হেল্পলাইন: 01886106856</p>
+                        </div>
                     </div>
                     <div style="text-align: right;">
                         <span style="font-size: 16px; font-weight: 800; color: #0f172a; display: block;">ইনভয়েস: ${order.orderId}</span>
