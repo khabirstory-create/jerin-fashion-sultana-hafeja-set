@@ -18,19 +18,24 @@
     --border: #e2e8f0;
     --border-hover: #cbd5e1;
 
-    --primary: #0f172a;
+    /* Jerin Fashion Official Logo Emerald Green Theme */
+    --primary: #0d5c46;
+    --primary-hover: #084232;
+    --primary-light: #e6f5f0;
+    --primary-border: #a4ddce;
+    --primary-glow: rgba(13, 92, 70, 0.3);
     --primary-foreground: #ffffff;
 
     --discount: #e11d48;
     --discount-bg: #fff1f2;
     --discount-border: #fecdd3;
 
-    --accent-red: #ef4d6a;
-    --accent-red-hover: #e11d48;
+    --accent-red: #0d5c46;
+    --accent-red-hover: #084232;
 
-    --success: #10b981;
-    --success-bg: #ecfdf5;
-    --success-border: #a7f3d0;
+    --success: #0d5c46;
+    --success-bg: #e6f5f0;
+    --success-border: #a4ddce;
 
     --warning: #f59e0b;
     --warning-bg: #fffbeb;
@@ -309,23 +314,23 @@ input[type="reset"] {
 /* Top Order Button */
 .order-button button {
     width: 100%;
-    background: var(--primary);
+    background: linear-gradient(135deg, #0d5c46 0%, #084232 100%);
     color: var(--primary-foreground);
     border: none;
-    border-radius: 10px;
-    padding: 14px 20px;
-    font-size: 16px;
+    border-radius: 12px;
+    padding: 15px 20px;
+    font-size: 16.5px;
     font-weight: 700;
     cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: var(--shadow-sm);
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 14px rgba(13, 92, 70, 0.35);
     letter-spacing: 0.3px;
 }
 
 .order-button button:hover {
-    background: #1e293b;
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-md);
+    background: linear-gradient(135deg, #084232 0%, #052b20 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(13, 92, 70, 0.45);
 }
 
 /* =========================================
@@ -370,7 +375,7 @@ input[type="reset"] {
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background: #10b981;
+    background: #0d5c46;
     color: #ffffff;
     display: flex;
     align-items: center;
@@ -413,25 +418,28 @@ input[type="reset"] {
     align-items: center;
     justify-content: center;
     gap: 8px;
-    background: #f1f5f9;
-    color: #0f172a;
+    background: #f8fafc;
+    color: #0d5c46;
     text-decoration: none;
-    padding: 10px 20px;
+    padding: 11px 22px;
     border-radius: 10px;
     font-family: var(--font-btn);
     font-size: 16px;
     font-weight: 700;
-    border: 1px solid var(--border);
+    border: 1.5px solid #a4ddce;
     transition: all 0.2s ease;
 }
 
 .call-button:hover {
-    background: #e2e8f0;
-    color: var(--discount);
+    background: #e6f5f0;
+    color: #084232;
+    border-color: #0d5c46;
+    transform: translateY(-1px);
 }
 
 .call-button i {
     font-size: 18px;
+    color: #0d5c46;
 }
 
 /* Limited Offer Section */
@@ -454,12 +462,12 @@ input[type="reset"] {
 
 .countdown-item {
     flex: 1;
-    background: var(--primary);
+    background: linear-gradient(135deg, #0d5c46 0%, #084232 100%);
     color: var(--primary-foreground);
     border-radius: 10px;
     padding: 10px 8px;
     text-align: center;
-    box-shadow: var(--shadow-sm);
+    box-shadow: 0 4px 10px rgba(13, 92, 70, 0.25);
 }
 
 .countdown-value {
@@ -509,8 +517,8 @@ input[type="reset"] {
 
 /* Selected Card */
 .product-item.selected {
-    border: 2px solid #0f172a;
-    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+    border: 2px solid #0d5c46;
+    box-shadow: 0 4px 16px rgba(13, 92, 70, 0.1);
 }
 
 /* Card Top: Checkbox + Image + Title & Price */
@@ -543,8 +551,8 @@ input[type="reset"] {
 }
 
 .product-item.selected .card-checkbox {
-    background: #0f172a;
-    border-color: #0f172a;
+    background: #0d5c46;
+    border-color: #0d5c46;
 }
 
 .product-item.selected .card-checkbox i {
@@ -574,14 +582,14 @@ input[type="reset"] {
     right: -5px;
     width: 22px;
     height: 22px;
-    background: #0f172a;
+    background: #0d5c46;
     color: #ffffff;
     border-radius: 50%;
     border: 2px solid #ffffff;
     align-items: center;
     justify-content: center;
     font-size: 11px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
+    box-shadow: 0 2px 4px rgba(13, 92, 70, 0.3);
 }
 
 .product-item.selected .thumb-check {
@@ -678,13 +686,13 @@ input[type="reset"] {
 }
 
 .size-buttons button:hover {
-    border-color: #0f172a;
+    border-color: #0d5c46;
 }
 
 .size-buttons button.selected {
-    background: #0f172a;
+    background: #0d5c46;
     color: #ffffff;
-    border-color: #0f172a;
+    border-color: #0d5c46;
 }
 
 /* Quantity Section */
@@ -735,13 +743,13 @@ input[type="reset"] {
 }
 
 .qty-btn.plus {
-    background: #0f172a;
-    border: 1px solid #0f172a;
+    background: #0d5c46;
+    border: 1px solid #0d5c46;
     color: #ffffff;
 }
 
 .qty-btn.plus:hover {
-    background: #1e293b;
+    background: #084232;
 }
 
 /* =========================================
@@ -782,11 +790,11 @@ input[type="reset"] {
 .form-group input,
 .form-group textarea {
     width: 100%;
-    padding: 10px 12px;
-    border: 1px solid #cbd5e1;
-    border-radius: 8px;
+    padding: 11px 13px;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 9px;
     font-family: var(--font-sans);
-    font-size: 14px;
+    font-size: 14.5px;
     color: var(--foreground);
     background: #ffffff;
     outline: none;
@@ -795,8 +803,8 @@ input[type="reset"] {
 
 .form-group input:focus,
 .form-group textarea:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.1);
+    border-color: #0d5c46;
+    box-shadow: 0 0 0 3px rgba(13, 92, 70, 0.18);
 }
 
 .form-group textarea {
@@ -814,17 +822,17 @@ input[type="reset"] {
 .radio-label {
     display: flex;
     align-items: center;
-    padding: 10px 14px;
+    padding: 11px 14px;
     background: #f8fafc;
-    border: 1px solid var(--border);
-    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    border-radius: 9px;
     cursor: pointer;
     transition: all 0.2s ease;
 }
 
 .radio-label:has(input:checked) {
-    background: #eff6ff;
-    border-color: #3b82f6;
+    background: #e6f5f0;
+    border-color: #0d5c46;
 }
 
 .radio-text {
@@ -832,29 +840,29 @@ input[type="reset"] {
     align-items: center;
     gap: 8px;
     font-size: 13.5px;
-    font-weight: 500;
+    font-weight: 600;
     color: var(--foreground);
 }
 
 .radio-label input[type="radio"] {
-    accent-color: #3b82f6;
-    width: 16px;
-    height: 16px;
+    accent-color: #0d5c46;
+    width: 17px;
+    height: 17px;
 }
 
 /* Order Summary Box */
 .order-summary {
     background: #f8fafc;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 14px;
+    border: 1.5px solid #a4ddce;
+    border-radius: 12px;
+    padding: 16px;
     margin: 18px 0 14px;
 }
 
 .summary-header {
-    font-size: 14px;
+    font-size: 14.5px;
     font-weight: 700;
-    color: var(--foreground);
+    color: #0d5c46;
     margin-bottom: 8px;
     display: flex;
     align-items: center;
@@ -899,7 +907,7 @@ input[type="reset"] {
 .grand-total {
     color: var(--discount);
     font-family: var(--font-num);
-    font-size: 17px;
+    font-size: 18px;
     font-weight: 800;
 }
 
@@ -921,23 +929,23 @@ input[type="reset"] {
 
 .confirm-button {
     width: 100%;
-    padding: 14px;
-    background-color: var(--accent-red);
+    padding: 16px 20px;
+    background: linear-gradient(135deg, #0d5c46 0%, #084232 100%);
     color: #ffffff;
     border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 700;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: 800;
     cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 12px rgba(239, 77, 106, 0.35);
-    letter-spacing: 0.3px;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 16px rgba(13, 92, 70, 0.35);
+    letter-spacing: 0.4px;
 }
 
 .confirm-button:hover:not(:disabled) {
-    background-color: var(--accent-red-hover);
-    transform: translateY(-1px);
-    box-shadow: 0 6px 16px rgba(239, 77, 106, 0.45);
+    background: linear-gradient(135deg, #084232 0%, #052b20 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 22px rgba(13, 92, 70, 0.45);
 }
 
 .confirm-button:disabled {
@@ -992,7 +1000,7 @@ input[type="reset"] {
 }
 
 .success-icon {
-    color: #10b981;
+    color: #0d5c46;
     font-size: 52px;
     margin-bottom: 12px;
 }
@@ -1011,25 +1019,25 @@ input[type="reset"] {
 }
 
 .contact-text {
-    color: #10b981 !important;
+    color: #0d5c46 !important;
     font-weight: 600;
 }
 
 .popup-button {
-    background-color: #10b981;
+    background-color: #0d5c46;
     color: white;
     border: none;
-    padding: 10px 28px;
+    padding: 11px 30px;
     border-radius: 8px;
     font-size: 15px;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
     margin-top: 16px;
     transition: background-color 0.2s ease;
 }
 
 .popup-button:hover {
-    background-color: #059669;
+    background-color: #084232;
 }
 
 /* Floating WhatsApp Button */
@@ -1142,7 +1150,7 @@ input[type="reset"] {
 }
 
 .trust-badge-item i {
-    color: #10b981;
+    color: #0d5c46;
     font-size: 17px;
 }
 
@@ -1155,14 +1163,14 @@ input[type="reset"] {
 }
 
 .agency-credit {
-    color: #0d9488;
+    color: #0d5c46;
     font-weight: 800;
     text-decoration: none;
     transition: color 0.2s ease, text-decoration 0.2s ease;
 }
 
 .agency-credit:hover {
-    color: #0f766e;
+    color: #084232;
     text-decoration: underline;
 }
 
