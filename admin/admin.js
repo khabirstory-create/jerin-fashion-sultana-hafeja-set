@@ -686,32 +686,266 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // --- 15. DASHBOARD STATS CALCULATION ---
+    // --- 15. DASHBOARD STATS & STATUS BREAKDOWN CALCULATION ---
+    function parseOrderDate(order) {
+        if (!order || !order.timestamp) return new Date();
+        const d = new Date(order.timestamp);
+        if (!isNaN(d.getTime())) return d;
+        return new Date();
+    }
+
+    function isSameDay(d1, d2) {
+        return d1.getFullYear() === d2.getFullYear() &&
+               d1.getMonth() === d2.getMonth() &&
+               d1.getDate() === d2.getDate();
+    }
+
+    let activePeriodFilter = null;
+
     function updateDashboardStats() {
         const orders = getOrders();
-        const statTotalOrders = document.getElementById('statTotalOrders');
-        const statTotalRevenue = document.getElementById('statTotalRevenue');
-        const statProcessingOrders = document.getElementById('statProcessingOrders');
-        const statCompletedOrders = document.getElementById('statCompletedOrders');
+        const now = new Date();
+        const yesterday = new Date(now);
+        yesterday.setDate(yesterday.getDate() - 1);
 
-        if (statTotalOrders) statTotalOrders.textContent = orders.length;
+        const sevenDaysAgo = new Date(now);
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
+        let todayCount = 0;
+        let yesterdayCount = 0;
+        let last7Count = 0;
+        let thisMonthCount = 0;
+        let totalCount = orders.length;
+
+        let todayRev = 0;
+        let monthRev = 0;
         let totalRev = 0;
-        let processingCount = 0;
-        let completedCount = 0;
+
+        let statusCounts = {
+            'Completed': 0,
+            'Processing': 0,
+            'Phone Confirm': 0,
+            'Packaging': 0,
+            'On Hold': 0,
+            'Cancelled': 0,
+            'Incomplete': 0
+        };
 
         orders.forEach(o => {
-            if (o.status === 'Completed') completedCount++;
-            if (o.status === 'Processing') processingCount++;
+            const orderDate = parseOrderDate(o);
+            const bill = o.numeric_total || parseFloat((o.total || '').replace(/[^0-9.]/g, '')) || 0;
 
-            const num = o.numeric_total || parseFloat((o.total || '').replace(/[^0-9.]/g, '')) || 0;
-            totalRev += num;
+            // Date metrics
+            if (isSameDay(orderDate, now)) {
+                todayCount++;
+                todayRev += bill;
+            }
+            if (isSameDay(orderDate, yesterday)) {
+                yesterdayCount++;
+            }
+            if (orderDate >= sevenDaysAgo && orderDate <= now) {
+                last7Count++;
+            }
+            if (orderDate.getFullYear() === now.getFullYear() && orderDate.getMonth() === now.getMonth()) {
+                thisMonthCount++;
+                monthRev += bill;
+            }
+
+            totalRev += bill;
+
+            // Status counts
+            const st = o.status || 'Processing';
+            if (statusCounts[st] !== undefined) {
+                statusCounts[st]++;
+            } else if (st === 'Delivered') {
+                statusCounts['Completed']++;
+            } else if (st === 'In Courier') {
+                statusCounts['Packaging']++;
+            } else {
+                statusCounts['Processing']++;
+            }
         });
 
-        if (statTotalRevenue) statTotalRevenue.textContent = `৳${totalRev.toLocaleString()}`;
-        if (statProcessingOrders) statProcessingOrders.textContent = processingCount;
-        if (statCompletedOrders) statCompletedOrders.textContent = completedCount;
+        // Update Elements in DOM
+        const elTodayOrders = document.getElementById('statTodayOrders');
+        const elYesterdayOrders = document.getElementById('statYesterdayOrders');
+        const elLast7Orders = document.getElementById('statLast7Orders');
+        const elThisMonthOrders = document.getElementById('statThisMonthOrders');
+        const elTotalOrders = document.getElementById('statTotalOrders');
+        const elTodayRevenue = document.getElementById('statTodayRevenue');
+        const elMonthRevenue = document.getElementById('statMonthRevenue');
+        const elTotalRevenue = document.getElementById('statTotalRevenue');
+
+        if (elTodayOrders) elTodayOrders.textContent = todayCount;
+        if (elYesterdayOrders) elYesterdayOrders.textContent = yesterdayCount;
+        if (elLast7Orders) elLast7Orders.textContent = last7Count;
+        if (elThisMonthOrders) elThisMonthOrders.textContent = thisMonthCount;
+        if (elTotalOrders) elTotalOrders.textContent = totalCount;
+        if (elTodayRevenue) elTodayRevenue.textContent = `৳${todayRev.toLocaleString()}`;
+        if (elMonthRevenue) elMonthRevenue.textContent = `৳${monthRev.toLocaleString()}`;
+        if (elTotalRevenue) elTotalRevenue.textContent = `৳${totalRev.toLocaleString()}`;
+
+        // Update Status Breakdown
+        const elCompleted = document.getElementById('statusCountCompleted');
+        const elProcessing = document.getElementById('statusCountProcessing');
+        const elPhoneConfirm = document.getElementById('statusCountPhoneConfirm');
+        const elPackaging = document.getElementById('statusCountPackaging');
+        const elOnHold = document.getElementById('statusCountOnHold');
+        const elCanceled = document.getElementById('statusCountCanceled');
+        const elIncomplete = document.getElementById('statusCountIncomplete');
+
+        if (elCompleted) elCompleted.textContent = statusCounts['Completed'];
+        if (elProcessing) elProcessing.textContent = statusCounts['Processing'];
+        if (elPhoneConfirm) elPhoneConfirm.textContent = statusCounts['Phone Confirm'];
+        if (elPackaging) elPackaging.textContent = statusCounts['Packaging'];
+        if (elOnHold) elOnHold.textContent = statusCounts['On Hold'];
+        if (elCanceled) elCanceled.textContent = statusCounts['Cancelled'];
+        if (elIncomplete) elIncomplete.textContent = statusCounts['Incomplete'];
     }
+
+    // Interactive drill-down navigation from Dashboard
+    window.filterOrdersByPeriod = function(period) {
+        activePeriodFilter = period;
+        const ordersNav = document.querySelector('.sidebar-nav .nav-item[data-tab="orders"]');
+        if (ordersNav) ordersNav.click();
+
+        if (statusFilterSelect) statusFilterSelect.value = '';
+        renderOrders();
+    };
+
+    window.filterOrdersByStatus = function(status) {
+        activePeriodFilter = null;
+        const ordersNav = document.querySelector('.sidebar-nav .nav-item[data-tab="orders"]');
+        if (ordersNav) ordersNav.click();
+
+        if (statusFilterSelect) {
+            statusFilterSelect.value = status;
+        }
+        renderOrders();
+    };
+
+    // Enhance renderOrders to support activePeriodFilter
+    const originalRenderOrders = renderOrders;
+    renderOrders = function() {
+        if (!ordersTableBody) return;
+        const orders = getOrders();
+
+        if (orderCountBadge) {
+            orderCountBadge.textContent = orders.length;
+        }
+
+        const searchQuery = (orderSearchInput ? orderSearchInput.value.toLowerCase().trim() : '');
+        const selectedStatus = (statusFilterSelect ? statusFilterSelect.value : '');
+        const selectedSource = (sourceFilterSelect ? sourceFilterSelect.value : '');
+
+        const now = new Date();
+        const yesterday = new Date(now);
+        yesterday.setDate(yesterday.getDate() - 1);
+        const sevenDaysAgo = new Date(now);
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+        const filtered = orders.filter(item => {
+            const matchesSearch = !searchQuery ||
+                (item.name && item.name.toLowerCase().includes(searchQuery)) ||
+                (item.phone && item.phone.includes(searchQuery)) ||
+                (item.orderId && item.orderId.toLowerCase().includes(searchQuery)) ||
+                (item.address && item.address.toLowerCase().includes(searchQuery)) ||
+                (item.product && item.product.toLowerCase().includes(searchQuery));
+
+            const matchesStatus = !selectedStatus || item.status === selectedStatus;
+            const matchesSource = !selectedSource || (item.source && item.source.toLowerCase() === selectedSource.toLowerCase());
+
+            let matchesPeriod = true;
+            if (activePeriodFilter) {
+                const orderDate = parseOrderDate(item);
+                if (activePeriodFilter === 'today') matchesPeriod = isSameDay(orderDate, now);
+                else if (activePeriodFilter === 'yesterday') matchesPeriod = isSameDay(orderDate, yesterday);
+                else if (activePeriodFilter === 'last7') matchesPeriod = (orderDate >= sevenDaysAgo && orderDate <= now);
+                else if (activePeriodFilter === 'this_month') matchesPeriod = (orderDate.getFullYear() === now.getFullYear() && orderDate.getMonth() === now.getMonth());
+            }
+
+            return matchesSearch && matchesStatus && matchesSource && matchesPeriod;
+        });
+
+        if (filtered.length === 0) {
+            ordersTableBody.innerHTML = '';
+            if (noOrdersMessage) noOrdersMessage.style.display = 'block';
+            return;
+        }
+
+        if (noOrdersMessage) noOrdersMessage.style.display = 'none';
+
+        ordersTableBody.innerHTML = filtered.map(order => {
+            const statusClass = getStatusClass(order.status);
+            const sourceClass = getSourceClass(order.source);
+
+            return `
+                <tr data-id="${order.orderId}">
+                    <td>
+                        <span class="order-id-text">${order.orderId}</span>
+                    </td>
+                    <td>
+                        <div class="order-time-text">${order.timestamp || ''}</div>
+                    </td>
+                    <td>
+                        <div class="customer-info-box">
+                            <span class="customer-name">${order.name || 'N/A'}</span>
+                            <div class="customer-phone-row">
+                                <i class="ti ti-phone" style="font-size: 13px; color: #64748b;"></i>
+                                <a href="tel:${order.phone}" class="customer-phone">${order.phone || ''}</a>
+                                <button type="button" class="btn-check-phone" onclick="window.checkCustomerHistory('${order.phone}', '${order.name}')" title="কুরিয়ার হিস্ট্রি চেক করুন">
+                                    Check
+                                </button>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="address-text">${order.address || ''}</div>
+                    </td>
+                    <td>
+                        <div class="product-text">${order.product || ''}</div>
+                    </td>
+                    <td>
+                        <span class="delivery-area-text">${order.delivery || ''}</span>
+                    </td>
+                    <td>
+                        <span class="bill-amount-text">${order.total || '৳0'}</span>
+                    </td>
+                    <td>
+                        <span class="source-badge ${sourceClass}">
+                            <i class="ti ti-link"></i> ${order.source || 'Direct'}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="status-dropdown-wrapper">
+                            <span class="status-dot ${statusClass}"></span>
+                            <select class="status-select ${statusClass}" onchange="window.updateOrderStatus('${order.orderId}', this.value)">
+                                <option value="Processing" ${order.status === 'Processing' ? 'selected' : ''}>Processing</option>
+                                <option value="Completed" ${order.status === 'Completed' ? 'selected' : ''}>Completed</option>
+                                <option value="Phone Confirm" ${order.status === 'Phone Confirm' ? 'selected' : ''}>Phone Confirm</option>
+                                <option value="Packaging" ${order.status === 'Packaging' ? 'selected' : ''}>Packaging</option>
+                                <option value="In Courier" ${order.status === 'In Courier' ? 'selected' : ''}>In Courier</option>
+                                <option value="On Hold" ${order.status === 'On Hold' ? 'selected' : ''}>On Hold</option>
+                                <option value="Cancelled" ${order.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+                                <option value="Returned" ${order.status === 'Returned' ? 'selected' : ''}>Returned</option>
+                                <option value="Incomplete" ${order.status === 'Incomplete' ? 'selected' : ''}>Incomplete</option>
+                            </select>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="action-buttons-cell">
+                            <button type="button" class="btn-action-icon" onclick="window.viewOrderInvoice('${order.orderId}')" title="ইনভয়েস / মেমো দেখুন">
+                                <i class="ti ti-file-text"></i>
+                            </button>
+                            <button type="button" class="btn-action-icon delete" onclick="window.deleteOrder('${order.orderId}')" title="অর্ডার মুছুন">
+                                <i class="ti ti-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+    };
 
     // --- 16. INITIALIZE DASHBOARD ---
     function initDashboard() {
@@ -723,3 +957,4 @@ document.addEventListener('DOMContentLoaded', function() {
     // Run auth check on page load
     checkAuth();
 });
+

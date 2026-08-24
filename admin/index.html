@@ -234,41 +234,141 @@
                      TAB 2: DASHBOARD
                      ========================================================= -->
                 <section id="dashboardTabSection" class="tab-panel">
-                    <div class="dashboard-grid">
-                        <div class="stat-card">
-                            <div class="stat-info">
-                                <h3>মোট অর্ডার</h3>
-                                <div class="stat-value" id="statTotalOrders">0</div>
+                    
+                    <!-- Top 8 Analytics Metrics Card -->
+                    <div class="dashboard-section-card">
+                        <div class="analytics-grid-8">
+                            <!-- Row 1: Time-based Orders -->
+                            <div class="metric-card metric-today-order" onclick="window.filterOrdersByPeriod('today')">
+                                <div class="metric-header">
+                                    <span class="metric-dot red"></span>
+                                    <span class="metric-title">Today Order</span>
+                                </div>
+                                <div class="metric-value" id="statTodayOrders">0</div>
+                                <span class="metric-link">ক্লিক করে দেখুন →</span>
                             </div>
-                            <div class="stat-icon-wrapper teal">
-                                <i class="ti ti-shopping-cart"></i>
+
+                            <div class="metric-card metric-yesterday-order" onclick="window.filterOrdersByPeriod('yesterday')">
+                                <div class="metric-header">
+                                    <span class="metric-dot orange"></span>
+                                    <span class="metric-title">Yesterday Order</span>
+                                </div>
+                                <div class="metric-value" id="statYesterdayOrders">0</div>
+                                <span class="metric-link">ক্লিক করে দেখুন →</span>
+                            </div>
+
+                            <div class="metric-card metric-last7-order" onclick="window.filterOrdersByPeriod('last7')">
+                                <div class="metric-header">
+                                    <span class="metric-dot yellow"></span>
+                                    <span class="metric-title">Last 7 Days</span>
+                                </div>
+                                <div class="metric-value" id="statLast7Orders">0</div>
+                                <span class="metric-link">ক্লিক করে দেখুন →</span>
+                            </div>
+
+                            <div class="metric-card metric-month-order" onclick="window.filterOrdersByPeriod('this_month')">
+                                <div class="metric-header">
+                                    <span class="metric-dot lime"></span>
+                                    <span class="metric-title">This Month</span>
+                                </div>
+                                <div class="metric-value" id="statThisMonthOrders">0</div>
+                                <span class="metric-link">ক্লিক করে দেখুন →</span>
+                            </div>
+
+                            <!-- Row 2: Totals and Revenue -->
+                            <div class="metric-card metric-total-order" onclick="window.filterOrdersByPeriod('all')">
+                                <div class="metric-header">
+                                    <span class="metric-dot green"></span>
+                                    <span class="metric-title">Total Order</span>
+                                </div>
+                                <div class="metric-value" id="statTotalOrders">0</div>
+                            </div>
+
+                            <div class="metric-card metric-today-rev">
+                                <div class="metric-header">
+                                    <span class="metric-dot teal"></span>
+                                    <span class="metric-title">Today Revenue</span>
+                                </div>
+                                <div class="metric-value font-num" id="statTodayRevenue">৳0</div>
+                            </div>
+
+                            <div class="metric-card metric-month-rev">
+                                <div class="metric-header">
+                                    <span class="metric-dot blue"></span>
+                                    <span class="metric-title">Month Revenue</span>
+                                </div>
+                                <div class="metric-value font-num" id="statMonthRevenue">৳0</div>
+                            </div>
+
+                            <div class="metric-card metric-total-rev">
+                                <div class="metric-header">
+                                    <span class="metric-dot purple"></span>
+                                    <span class="metric-title">Total Revenue</span>
+                                </div>
+                                <div class="metric-value font-num" id="statTotalRevenue">৳0</div>
                             </div>
                         </div>
-                        <div class="stat-card">
-                            <div class="stat-info">
-                                <h3>মোট বিক্রয় (রেভিনিউ)</h3>
-                                <div class="stat-value" id="statTotalRevenue">৳0</div>
+                    </div>
+
+                    <!-- Bottom Status Breakdown Card -->
+                    <div class="dashboard-section-card" style="margin-top: 24px;">
+                        <h2 class="section-heading-dark">Status Breakdown</h2>
+                        
+                        <div class="status-breakdown-grid">
+                            <div class="status-card-box stat-completed" onclick="window.filterOrdersByStatus('Completed')">
+                                <div class="status-card-header">
+                                    <span class="metric-dot green"></span>
+                                    <span class="status-card-title">Completed</span>
+                                </div>
+                                <div class="status-card-value" id="statusCountCompleted">0</div>
                             </div>
-                            <div class="stat-icon-wrapper green">
-                                <i class="ti ti-cash"></i>
+
+                            <div class="status-card-box stat-processing" onclick="window.filterOrdersByStatus('Processing')">
+                                <div class="status-card-header">
+                                    <span class="metric-dot purple"></span>
+                                    <span class="status-card-title">Processing</span>
+                                </div>
+                                <div class="status-card-value" id="statusCountProcessing">0</div>
                             </div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-info">
-                                <h3>প্রসেসিং অর্ডার</h3>
-                                <div class="stat-value" id="statProcessingOrders">0</div>
+
+                            <div class="status-card-box stat-phone-confirm" onclick="window.filterOrdersByStatus('Phone Confirm')">
+                                <div class="status-card-header">
+                                    <span class="metric-dot cyan"></span>
+                                    <span class="status-card-title">Phone Confirm</span>
+                                </div>
+                                <div class="status-card-value" id="statusCountPhoneConfirm">0</div>
                             </div>
-                            <div class="stat-icon-wrapper blue">
-                                <i class="ti ti-clock"></i>
+
+                            <div class="status-card-box stat-packaging" onclick="window.filterOrdersByStatus('Packaging')">
+                                <div class="status-card-header">
+                                    <span class="metric-dot magenta"></span>
+                                    <span class="status-card-title">Packaging</span>
+                                </div>
+                                <div class="status-card-value" id="statusCountPackaging">0</div>
                             </div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-info">
-                                <h3>ডেলিভার্ড / সম্পন্ন</h3>
-                                <div class="stat-value" id="statCompletedOrders">0</div>
+
+                            <div class="status-card-box stat-on-hold" onclick="window.filterOrdersByStatus('On Hold')">
+                                <div class="status-card-header">
+                                    <span class="metric-dot orange"></span>
+                                    <span class="status-card-title">On Hold</span>
+                                </div>
+                                <div class="status-card-value" id="statusCountOnHold">0</div>
                             </div>
-                            <div class="stat-icon-wrapper yellow">
-                                <i class="ti ti-circle-check"></i>
+
+                            <div class="status-card-box stat-canceled" onclick="window.filterOrdersByStatus('Cancelled')">
+                                <div class="status-card-header">
+                                    <span class="metric-dot red"></span>
+                                    <span class="status-card-title">Canceled</span>
+                                </div>
+                                <div class="status-card-value" id="statusCountCanceled">0</div>
+                            </div>
+
+                            <div class="status-card-box stat-incomplete" onclick="window.filterOrdersByStatus('Incomplete')">
+                                <div class="status-card-header">
+                                    <span class="metric-dot gray"></span>
+                                    <span class="status-card-title">Incomplete</span>
+                                </div>
+                                <div class="status-card-value" id="statusCountIncomplete">0</div>
                             </div>
                         </div>
                     </div>

@@ -977,54 +977,257 @@ body {
 }
 
 /* =================================================================
-   DASHBOARD TAB STYLES
+   DASHBOARD TAB STYLES (MATCHING USER SCREENSHOT EXACTLY)
    ================================================================= */
-.dashboard-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 16px;
-    margin-bottom: 24px;
-}
-
-.stat-card {
+.dashboard-section-card {
     background: #ffffff;
     border: 1px solid var(--border-color);
     border-radius: var(--radius-lg);
-    padding: 20px;
+    box-shadow: var(--shadow-card);
+    padding: 24px;
+}
+
+.section-heading-dark {
+    font-size: 18px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 18px;
+}
+
+/* 8-METRICS GRID */
+.analytics-grid-8 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.metric-card {
+    border-radius: 16px;
+    padding: 20px 22px;
+    border: 1px solid transparent;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    min-height: 120px;
+}
+
+.metric-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.05);
+}
+
+.metric-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    box-shadow: var(--shadow-subtle);
+    gap: 8px;
+    margin-bottom: 8px;
 }
 
-.stat-info h3 {
-    font-size: 13px;
-    color: var(--text-secondary);
-    font-weight: 600;
+.metric-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #475569;
+}
+
+.metric-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.metric-dot.red { background-color: #ef4444; }
+.metric-dot.orange { background-color: #f59e0b; }
+.metric-dot.yellow { background-color: #eab308; }
+.metric-dot.lime { background-color: #84cc16; }
+.metric-dot.green { background-color: #10b981; }
+.metric-dot.teal { background-color: #0d9488; }
+.metric-dot.blue { background-color: #3b82f6; }
+.metric-dot.purple { background-color: #6366f1; }
+.metric-dot.cyan { background-color: #06b6d4; }
+.metric-dot.magenta { background-color: #a855f7; }
+.metric-dot.gray { background-color: #94a3b8; }
+
+.metric-value {
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1.1;
     margin-bottom: 6px;
+    font-family: var(--font-num);
 }
 
-.stat-info .stat-value {
-    font-size: 24px;
+.metric-link {
+    font-size: 12.5px;
+    color: #64748b;
+    font-weight: 600;
+    transition: color 0.15s ease;
+}
+
+.metric-card:hover .metric-link {
+    color: #0f172a;
+}
+
+/* Individual Metric Color Palettes matching screenshot */
+/* 1. Today Order */
+.metric-today-order {
+    background-color: #fff1f2;
+    border-color: #ffe4e6;
+}
+.metric-today-order .metric-value { color: #e11d48; }
+
+/* 2. Yesterday Order */
+.metric-yesterday-order {
+    background-color: #fffbeb;
+    border-color: #fef3c7;
+}
+.metric-yesterday-order .metric-value { color: #d97706; }
+
+/* 3. Last 7 Days */
+.metric-last7-order {
+    background-color: #fefce8;
+    border-color: #fef08a;
+}
+.metric-last7-order .metric-value { color: #ca8a04; }
+
+/* 4. This Month */
+.metric-month-order {
+    background-color: #f7fee7;
+    border-color: #ecfccb;
+}
+.metric-month-order .metric-value { color: #65a30d; }
+
+/* 5. Total Order */
+.metric-total-order {
+    background-color: #f0fdf4;
+    border-color: #dcfce7;
+}
+.metric-total-order .metric-value { color: #16a34a; }
+
+/* 6. Today Revenue */
+.metric-today-rev {
+    background-color: #f0fdfa;
+    border-color: #ccfbf1;
+}
+.metric-today-rev .metric-value { color: #0d9488; }
+
+/* 7. Month Revenue */
+.metric-month-rev {
+    background-color: #eff6ff;
+    border-color: #dbeafe;
+}
+.metric-month-rev .metric-value { color: #0284c7; }
+
+/* 8. Total Revenue */
+.metric-total-rev {
+    background-color: #f5f3ff;
+    border-color: #ede9fe;
+}
+.metric-total-rev .metric-value { color: #4f46e5; }
+
+/* =================================================================
+   STATUS BREAKDOWN CARDS
+   ================================================================= */
+.status-breakdown-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+}
+
+.status-card-box {
+    border-radius: 14px;
+    padding: 16px 20px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.status-card-box:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+}
+
+.status-card-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.status-card-title {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #475569;
+}
+
+.status-card-value {
+    font-size: 26px;
     font-weight: 800;
     font-family: var(--font-num);
-    color: var(--text-primary);
+    line-height: 1.1;
 }
 
-.stat-icon-wrapper {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
+/* Status Cards Themes */
+.stat-completed {
+    background-color: #f0fdf4;
+    border-color: #bbf7d0;
+}
+.stat-completed .status-card-value { color: #16a34a; }
+
+.stat-processing {
+    background-color: #f5f3ff;
+    border-color: #ddd6fe;
+}
+.stat-processing .status-card-value { color: #4f46e5; }
+
+.stat-phone-confirm {
+    background-color: #ecfeff;
+    border-color: #a5f3fc;
+}
+.stat-phone-confirm .status-card-value { color: #0891b2; }
+
+.stat-packaging {
+    background-color: #faf5ff;
+    border-color: #f3e8ff;
+}
+.stat-packaging .status-card-value { color: #9333ea; }
+
+.stat-on-hold {
+    background-color: #fff7ed;
+    border-color: #fed7aa;
+}
+.stat-on-hold .status-card-value { color: #ea580c; }
+
+.stat-canceled {
+    background-color: #fff1f2;
+    border-color: #fecdd3;
+}
+.stat-canceled .status-card-value { color: #e11d48; }
+
+.stat-incomplete {
+    background-color: #f8fafc;
+    border-color: #e2e8f0;
+}
+.stat-incomplete .status-card-value { color: #64748b; }
+
+@media (max-width: 1200px) {
+    .analytics-grid-8 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .status-breakdown-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 
-.stat-icon-wrapper.teal { background: var(--brand-teal-light); color: var(--brand-teal); }
-.stat-icon-wrapper.blue { background: #dbeafe; color: #2563eb; }
-.stat-icon-wrapper.green { background: #dcfce7; color: #16a34a; }
-.stat-icon-wrapper.yellow { background: #fef9c3; color: #ca8a04; }
+@media (max-width: 640px) {
+    .analytics-grid-8 {
+        grid-template-columns: 1fr;
+    }
+    .status-breakdown-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
 
 /* =================================================================
    SETTINGS TAB STYLES
