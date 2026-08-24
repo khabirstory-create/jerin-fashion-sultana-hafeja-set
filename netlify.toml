@@ -23,6 +23,7 @@
     X-Frame-Options = "DENY"
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
+    Content-Security-Policy = "frame-src 'none'; child-src 'none'; object-src 'none';"
 
 [context.production.environment]
   NETLIFY_DRAWER = "off"

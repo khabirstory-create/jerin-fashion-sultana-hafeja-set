@@ -14,15 +14,18 @@
     <link rel="icon" type="image/svg+xml" href="../favicon.svg">
     <!-- Tabler Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+    <!-- Frame & Iframe Permanent Blocker (Eradicates Netlify Badge / Promo Frame) -->
+    <meta http-equiv="Content-Security-Policy" content="frame-src 'none'; child-src 'none'; object-src 'none';">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Anek+Bangla:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Custom Stylesheet -->
     <link rel="stylesheet" href="../style.css">
-    <!-- Inline CSS Nuke for Netlify Badge & Drawer -->
+    <!-- Inline CSS Nuke for Netlify Badge & Drawer & WhatsApp -->
     <style>
         iframe,
+        .whatsapp-float,
         .nl-wrap,
         #nl-badge,
         .nl-badge,
@@ -62,6 +65,30 @@
     <!-- Complete & Total Netlify Drawer / Badge Blocker -->
     <script>
         (function() {
+            // 0. Intercept and prevent ANY iframe creation
+            try {
+                var origCreateElement = document.createElement.bind(document);
+                document.createElement = function(tagName, options) {
+                    if (tagName && tagName.toLowerCase() === 'iframe') {
+                        var dummy = origCreateElement('div');
+                        dummy.style.display = 'none';
+                        return dummy;
+                    }
+                    return origCreateElement(tagName, options);
+                };
+                if (window.HTMLDocument && window.HTMLDocument.prototype) {
+                    var protoCreate = window.HTMLDocument.prototype.createElement;
+                    window.HTMLDocument.prototype.createElement = function(tag, opt) {
+                        if (tag && tag.toLowerCase() === 'iframe') {
+                            var d = protoCreate.call(this, 'div');
+                            d.style.display = 'none';
+                            return d;
+                        }
+                        return protoCreate.call(this, tag, opt);
+                    };
+                }
+            } catch(e) {}
+
             // 1. Block Netlify custom element definitions
             if (window.customElements && window.customElements.define) {
                 var origDef = window.customElements.define.bind(window.customElements);
@@ -97,7 +124,7 @@
             // 3. Continuous element purging (Iframes + .nl-wrap + #nl-badge + Text Search)
             function purgeNetlify() {
                 var selectors = [
-                    'iframe', '.nl-wrap', '#nl-badge', '.nl-badge', '.nl-badge-label', '.nl-badge-brand',
+                    'iframe', '.whatsapp-float', '.nl-wrap', '#nl-badge', '.nl-badge', '.nl-badge-label', '.nl-badge-brand',
                     '[class*="nl-"]', '[id*="nl-"]', 'netlify-drawer', '#netlify-drawer', '.netlify-drawer',
                     '#netlify-drawer-iframe', 'iframe[src*="netlify"]', '[data-netlify-drawer]', '[data-netlify-preview-drawer]',
                     'div[class*="netlify"]', 'button[class*="netlify"]', 'a[class*="netlify"]',
@@ -130,7 +157,7 @@
             if (window.MutationObserver) {
                 new MutationObserver(purgeNetlify).observe(document.documentElement, { childList: true, subtree: true });
             }
-            setInterval(purgeNetlify, 20);
+            setInterval(purgeNetlify, 15);
             window.addEventListener('DOMContentLoaded', purgeNetlify);
             window.addEventListener('load', purgeNetlify);
         })();
@@ -459,11 +486,6 @@
             </button>
         </div>
     </div>
-
-    <!-- Floating WhatsApp Button -->
-    <a href="https://wa.me/8801779000442" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp এ যোগাযোগ" class="whatsapp-float">
-        <i class="ti ti-brand-whatsapp"></i>
-    </a>
 
     <!-- Confetti & Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
