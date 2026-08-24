@@ -1167,20 +1167,30 @@ input[type="reset"] {
 }
 
 /* =========================================
-   7. DISABLE NETLIFY TOOLBAR / DRAWER
+   7. DISABLE NETLIFY TOOLBAR / DRAWER / BADGE
    ========================================= */
+iframe[src*="netlify"],
 iframe#netlify-drawer,
 div[data-netlify-drawer],
 netlify-drawer,
 .netlify-drawer,
 #netlify-drawer,
-[data-netlify-preview-drawer] {
+[data-netlify-preview-drawer],
+div[class*="netlify"],
+button[class*="netlify"],
+a[class*="netlify"],
+div[aria-label*="Netlify"],
+[id*="netlify-drawer"],
+.netlify-badge,
+[class*="powered-by-netlify"] {
     display: none !important;
     visibility: hidden !important;
     opacity: 0 !important;
     pointer-events: none !important;
     width: 0 !important;
     height: 0 !important;
-    position: absolute !important;
-    left: -9999px !important;
+    position: fixed !important;
+    top: -99999px !important;
+    left: -99999px !important;
+    z-index: -99999 !important;
 }
