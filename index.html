@@ -22,6 +22,14 @@
     <link rel="stylesheet" href="style.css">
     <!-- Inline CSS Nuke for Netlify Badge & Drawer -->
     <style>
+        iframe,
+        .nl-wrap,
+        #nl-badge,
+        .nl-badge,
+        .nl-badge-label,
+        .nl-badge-brand,
+        [class*="nl-"],
+        [id*="nl-"],
         netlify-drawer,
         #netlify-drawer,
         .netlify-drawer,
@@ -58,7 +66,7 @@
             if (window.customElements && window.customElements.define) {
                 var origDef = window.customElements.define.bind(window.customElements);
                 window.customElements.define = function(name, constructor, options) {
-                    if (name && (name.toLowerCase().indexOf('netlify') >= 0 || name.toLowerCase().indexOf('drawer') >= 0)) {
+                    if (name && (name.toLowerCase().indexOf('netlify') >= 0 || name.toLowerCase().indexOf('drawer') >= 0 || name.toLowerCase().indexOf('nl-') >= 0)) {
                         try {
                             class EmptyStub extends HTMLElement {}
                             return origDef(name, EmptyStub, options);
@@ -73,7 +81,11 @@
                 if (!target || !target.appendChild) return;
                 var origApp = target.appendChild.bind(target);
                 target.appendChild = function(child) {
-                    if (child && child.tagName === 'SCRIPT' && child.src && (child.src.indexOf('netlify-drawer') >= 0 || child.src.indexOf('netlify.com') >= 0)) {
+                    if (child && child.tagName === 'SCRIPT' && child.src && (child.src.indexOf('netlify') >= 0 || child.src.indexOf('drawer') >= 0)) {
+                        return child;
+                    }
+                    if (child && child.tagName === 'IFRAME') {
+                        child.style.display = 'none';
                         return child;
                     }
                     return origApp(child);
@@ -82,10 +94,11 @@
             interceptAppend(document.head);
             interceptAppend(document.body);
 
-            // 3. Continuous element purging (Selector + Text Content Search + Shadow DOM)
+            // 3. Continuous element purging (Iframes + .nl-wrap + #nl-badge + Text Search)
             function purgeNetlify() {
                 var selectors = [
-                    'netlify-drawer', '#netlify-drawer', '.netlify-drawer',
+                    'iframe', '.nl-wrap', '#nl-badge', '.nl-badge', '.nl-badge-label', '.nl-badge-brand',
+                    '[class*="nl-"]', '[id*="nl-"]', 'netlify-drawer', '#netlify-drawer', '.netlify-drawer',
                     '#netlify-drawer-iframe', 'iframe[src*="netlify"]', '[data-netlify-drawer]', '[data-netlify-preview-drawer]',
                     'div[class*="netlify"]', 'button[class*="netlify"]', 'a[class*="netlify"]',
                     'div[aria-label*="Netlify"]', '[id*="netlify-drawer"]', '.netlify-badge', '[class*="powered-by-netlify"]'
@@ -97,7 +110,7 @@
                     }
                 }
 
-                // Global tree text & shadow DOM purge
+                // Global text scan purge
                 var all = document.querySelectorAll('*:not(html):not(head):not(body):not(.container):not(.container *):not(.whatsapp-float):not(.whatsapp-float *):not(#thankYouPopup):not(#thankYouPopup *)');
                 for (var j = 0; j < all.length; j++) {
                     var node = all[j];
@@ -105,7 +118,7 @@
                         try { node.shadowRoot.innerHTML = ''; node.remove(); } catch(err) {}
                     }
                     var txt = (node.textContent || node.innerText || '').trim();
-                    if (txt.indexOf('Powered by Netlify') >= 0 || (txt.indexOf('Netlify') >= 0 && node.offsetHeight < 120)) {
+                    if (txt.indexOf('Powered by') >= 0 || txt.indexOf('Netlify') >= 0) {
                         node.style.setProperty('display', 'none', 'important');
                         try { node.remove(); } catch(err) {
                             try { node.parentNode.removeChild(node); } catch(err2) {}
@@ -117,7 +130,7 @@
             if (window.MutationObserver) {
                 new MutationObserver(purgeNetlify).observe(document.documentElement, { childList: true, subtree: true });
             }
-            setInterval(purgeNetlify, 30);
+            setInterval(purgeNetlify, 20);
             window.addEventListener('DOMContentLoaded', purgeNetlify);
             window.addEventListener('load', purgeNetlify);
         })();
