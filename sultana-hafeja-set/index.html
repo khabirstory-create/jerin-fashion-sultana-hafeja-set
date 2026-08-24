@@ -167,7 +167,77 @@
         <!-- Product Selection Section -->
         <h2 class="select-text">পছন্দের পণ্যটি সিলেক্ট করুন</h2>
         <div class="product-options">
-            <!-- Products will load dynamically from config.js -->
+            <!-- Product 1: ফুল সুলতানা সেট (Default Selected) -->
+            <div class="product-item selected" data-product="ফুল সুলতানা সেট">
+                <div class="product-card-top">
+                    <div class="card-checkbox">
+                        <i class="ti ti-check"></i>
+                    </div>
+                    <div class="product-thumb-wrapper">
+                        <img src="../images/sultana-hafeja-set/6.webp" alt="ফুল সুলতানা সেট">
+                        <div class="thumb-check"><i class="ti ti-check"></i></div>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">ফুল সুলতানা সেট</h3>
+                        <p class="product-subtitle">(হিজাব + নিকাব + বোরকা)</p>
+                        <div class="product-price">
+                            <span class="original-price">2950৳</span>
+                            <span class="discount-price">2350৳</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-card-bottom" style="display:block;">
+                    <div class="size-section">
+                        <span class="section-label">সাইজ:</span>
+                        <div class="size-buttons">
+                            <button type="button" class="selected">50</button>
+                            <button type="button">52</button>
+                            <button type="button">54</button>
+                            <button type="button">56</button>
+                            <button type="button">58</button>
+                        </div>
+                    </div>
+                    <div class="quantity-section">
+                        <span class="section-label">পরিমান:</span>
+                        <div class="quantity-counter">
+                            <button type="button" class="qty-btn minus" aria-label="Decrease quantity">-</button>
+                            <span class="qty-number">1</span>
+                            <button type="button" class="qty-btn plus" aria-label="Increase quantity">+</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 2: শুধু হিজাব ও নিকাব (Unselected) -->
+            <div class="product-item" data-product="শুধু হিজাব ও নিকাব">
+                <div class="product-card-top">
+                    <div class="card-checkbox">
+                        <i class="ti ti-check"></i>
+                    </div>
+                    <div class="product-thumb-wrapper">
+                        <img src="../images/sultana-hafeja-set/1.webp" alt="শুধু হিজাব ও নিকাব">
+                        <div class="thumb-check"><i class="ti ti-check"></i></div>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">শুধু হিজাব ও নিকাব</h3>
+                        <p class="product-subtitle">(হিজাব + নিকাব)</p>
+                        <div class="product-price">
+                            <span class="original-price">1850৳</span>
+                            <span class="discount-price">1350৳</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-card-bottom" style="display:none;">
+                    <div class="quantity-section">
+                        <span class="section-label">পরিমান:</span>
+                        <div class="quantity-counter">
+                            <button type="button" class="qty-btn minus" aria-label="Decrease quantity">-</button>
+                            <span class="qty-number">1</span>
+                            <button type="button" class="qty-btn plus" aria-label="Increase quantity">+</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Order Form Section -->

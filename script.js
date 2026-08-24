@@ -48,6 +48,14 @@ document.addEventListener('DOMContentLoaded', function() {
         insideRadioLabel.parentElement.innerHTML = `<input type="radio" name="delivery" value="inside"> ঢাকা সিটির ভিতরে (${shippingDhaka} টাকা)`;
     }
 
+    // Helper to safely format image paths for root and subfolder
+    function getSafeImagePath(imgPath) {
+        if (!imgPath) return 'images/sultana-hafeja-set/6.webp';
+        const isSubdir = window.location.pathname.includes('sultana-hafeja-set');
+        const clean = imgPath.replace(/^(\.\.\/|\.\/)/, '');
+        return isSubdir ? ('../' + clean) : clean;
+    }
+
     // --- 1. DYNAMICALLY RENDER PRODUCTS ---
     const productOptionsContainer = document.querySelector('.product-options');
     
@@ -55,6 +63,7 @@ document.addEventListener('DOMContentLoaded', function() {
         productOptionsContainer.innerHTML = rawProducts.map((prod, index) => {
             const isDefault = (index === 0);
             const hasSizes = prod.sizes && Array.isArray(prod.sizes) && prod.sizes.length > 0;
+            const imgSrc = getSafeImagePath(prod.image);
             
             return `
                 <div class="product-item ${isDefault ? 'selected' : ''}" data-product="${prod.key || index}">
@@ -63,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             <i class="ti ti-check"></i>
                         </div>
                         <div class="product-thumb-wrapper">
-                            <img src="${prod.image || '../images/sultana-hafeja-set/1.webp'}" alt="${prod.title || 'Product'}">
+                            <img src="${imgSrc}" alt="${prod.title || 'Product'}">
                             <div class="thumb-check"><i class="ti ti-check"></i></div>
                         </div>
                         <div class="product-info">
@@ -90,9 +99,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         <div class="quantity-section">
                             <span class="section-label">পরিমান:</span>
                             <div class="quantity-counter">
-                                <button type="button" class="qty-btn minus">-</button>
+                                <button type="button" class="qty-btn minus" aria-label="Decrease quantity">-</button>
                                 <span class="qty-number">1</span>
-                                <button type="button" class="qty-btn plus">+</button>
+                                <button type="button" class="qty-btn plus" aria-label="Increase quantity">+</button>
                             </div>
                         </div>
                     </div>
