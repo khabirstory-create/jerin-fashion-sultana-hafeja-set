@@ -590,7 +590,7 @@ document.addEventListener('DOMContentLoaded', function() {
             saveOrderLocally(orderData);
 
             // Google Sheets Apps Script Submission
-            const currentSheetUrl = activeConfig.GOOGLE_SHEET_URL || localStorage.getItem('gas_sheet_url') || '';
+            const currentSheetUrl = activeConfig.GOOGLE_SHEET_URL || localStorage.getItem('gas_sheet_url') || 'https://script.google.com/macros/s/AKfycbxjLSojt-GxM3dpBwJ7gkbYgloVvGLO-VhaMGaAiJRpKaSiW28kerZNi9jcTDTLPedm/exec';
             
             const submitPromises = [];
 

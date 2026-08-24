@@ -673,8 +673,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const settingFbTestCode = document.getElementById('settingFbTestCode');
     const settingAdminPassword = document.getElementById('settingAdminPassword');
 
+    const ACTIVE_GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbxjLSojt-GxM3dpBwJ7gkbYgloVvGLO-VhaMGaAiJRpKaSiW28kerZNi9jcTDTLPedm/exec";
+
     function loadSettings() {
-        if (settingGoogleSheetUrl) settingGoogleSheetUrl.value = localStorage.getItem('gas_sheet_url') || '';
+        if (settingGoogleSheetUrl) settingGoogleSheetUrl.value = localStorage.getItem('gas_sheet_url') || ACTIVE_GOOGLE_SHEET_URL;
         if (settingStoreName) settingStoreName.value = localStorage.getItem('store_name') || 'Jerin Fashion';
         if (settingHelpline) settingHelpline.value = localStorage.getItem('store_helpline') || '01779000442';
         if (settingFbPixelId) settingFbPixelId.value = localStorage.getItem('fb_pixel_id') || '1366048449016304';
@@ -1013,13 +1015,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // --- 17. GOOGLE SHEET BI-DIRECTIONAL LIVE SYNC ---
     async function syncWithGoogleSheet(showFeedback = false) {
-        const sheetUrl = localStorage.getItem('gas_sheet_url') || (window.ADMIN_CONFIG && window.ADMIN_CONFIG.GOOGLE_SHEET_URL) || '';
+        const sheetUrl = localStorage.getItem('gas_sheet_url') || (window.ADMIN_CONFIG && window.ADMIN_CONFIG.GOOGLE_SHEET_URL) || ACTIVE_GOOGLE_SHEET_URL;
         const topSyncBtn = document.getElementById('topSyncBtn');
-
-        if (!sheetUrl) {
-            if (showFeedback) alert('গুগল শিটের Web App URL পাওয়া যায়নি! অনুগ্রহ করে Settings ট্যাবে লিঙ্কটি দিয়ে সেভ করুন।');
-            return;
-        }
 
         if (topSyncBtn) {
             topSyncBtn.disabled = true;
@@ -1027,7 +1024,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         try {
-            const res = await fetch(sheetUrl);
+            const res = await fetch(sheetUrl, { cache: 'no-store' });
             const data = await res.json();
 
             if (data && data.success && Array.isArray(data.orders)) {
@@ -1047,18 +1044,21 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 });
 
+                // Clean and save
+                localOrders = localOrders.filter(o => o.orderId && o.name);
+
                 saveOrders(localOrders);
                 renderOrders();
                 updateDashboardStats();
 
                 if (showFeedback) {
-                    alert(`গুগল শিট থেকে ${data.orders.length}টি অর্ডার সফলভাবে সিঙ্ক ও আপডেট হয়েছে! 🎉`);
+                    alert(`গুগল শিট থেকে ${data.orders.length}টি অর্ডার সফলভাবে ড্যাশবোর্ডে সিঙ্ক হয়েছে! 🎉`);
                 }
             }
         } catch (err) {
             console.warn('Google Sheet Sync note:', err);
             if (showFeedback) {
-                alert('গুগল শিটের সাথে সংযোগ করা যাচ্ছে না। অনুগ্রহ করে নিশ্চিত করুন Apps Script এ Who has access: "Anyone" নির্বাচন করা আছে।');
+                alert('গুগল শিট থেকে ডাটা ফেচ করা হচ্ছে... অনুগ্রহ করে পেজ রিফ্রেশ করুন।');
             }
         } finally {
             if (topSyncBtn) {
@@ -1081,6 +1081,8 @@ document.addEventListener('DOMContentLoaded', function() {
         renderOrders();
         updateDashboardStats();
         syncWithGoogleSheet(false);
+        // Auto-sync every 20 seconds
+        setInterval(() => syncWithGoogleSheet(false), 20000);
     }
 
     // Run auth check on page load
