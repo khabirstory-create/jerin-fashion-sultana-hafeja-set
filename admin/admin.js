@@ -641,8 +641,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     <span style="font-size: 20px; font-weight: 800; color: #e11d48;">${order.total}</span>
                 </div>
 
-                <div style="margin-top: 20px; text-align: center; font-size: 12px; color: #94a3b8; border-top: 1px solid #f1f5f9; padding-top: 10px;">
-                    আমাদের সাথে কেনাকাটা করার জন্য ধন্যবাদ! ❤️
+                <div style="margin-top: 16px; text-align: center; font-size: 12px; color: #64748b; border-top: 1px solid #f1f5f9; padding-top: 10px;">
+                    আমাদের সাথে কেনাকাটা করার জন্য ধন্যবাদ! ❤️<br>
+                    <span style="font-size: 11px; color: #94a3b8; margin-top: 4px; display: inline-block;">© Created by "MD.KHABIR" Agency</span>
                 </div>
             </div>
         `;
